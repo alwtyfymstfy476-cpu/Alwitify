@@ -1,4 +1,4 @@
-Enter<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -6,111 +6,101 @@ Enter<!DOCTYPE html>
     <title>Practical Chemistry Final Exam MCQs</title>
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass: rgba(255,255,255,0.12);
+            --glass-border: rgba(255,255,255,0.2);
+            --card-bg: rgba(255,255,255,0.85);
             --primary: #3b82f6;
             --success: #10b981;
             --danger: #ef4444;
-            --text: #e2e8f0;
-            --text-dark: #1e293b;
-            --radius: 12px;
+            --radius: 14px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         html { overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #064e3b 100%);
-            color: var(--text);
+            background: #000;
+            color: #e2e8f0;
             padding-bottom: 50px;
             touch-action: pan-y;
             -webkit-tap-highlight-color: transparent;
             overscroll-behavior-y: contain;
         }
-        /* Chemistry Animated Background */
         #chem-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-
         .glass {
             background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
         }
-
-        #app { position: relative; z-index: 10; max-width: 850px; margin: 0 auto; padding: 1.5rem; }
+        #app { position: relative; z-index: 10; max-width: 900px; margin: 0 auto; padding: 1.5rem; }
         .hidden { display: none !important; }
         .ai-hidden { display: none !important; }
-
-        #home-view { padding: 2rem; text-align: center; margin-top: 2rem; }
-        h1 { font-size: 1.9rem; margin-bottom: 0.5rem; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .subtitle { font-size: 1rem; color: #94a3b8; margin-bottom: 2rem; font-weight: 500; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .card-btn {            padding: 1.3rem; cursor: pointer; transition: all 0.25s;
-            background: rgba(255,255,255,0.85); border-radius: var(--radius); font-weight: bold; color: #1e293b;
-            display: flex; align-items: center; justify-content: center; min-height: 70px; gap: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        #home-view { padding: 2.5rem 1.5rem; text-align: center; margin-top: 2rem; }
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); letter-spacing: -0.5px; }
+        .subtitle { font-size: 1.1rem; color: #94a3b8; margin-bottom: 2.5rem; font-weight: 500; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
+        .card-btn {
+            padding: 1.5rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: rgba(255,255,255,0.9); border-radius: var(--radius); font-weight: bold; color: #0f172a;
+            display: flex; align-items: center; justify-content: center; min-height: 80px; gap: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
-        .card-btn:hover, .card-btn:active { transform: none !important; background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
-        .card-btn.mixed { background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%); color: white; }
-        .q-count { font-size: 0.8em; opacity: 0.7; font-weight: normal; margin-right: 4px; }
-
+        .card-btn:hover, .card-btn:active { transform: none !important; background: #fff; box-shadow: 0 12px 30px rgba(0,0,0,0.3); }        .card-btn.mixed { background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%); color: white; }
+        .q-count { font-size: 0.85em; opacity: 0.6; font-weight: normal; margin-right: 6px; }
         #quiz-view { background: transparent; border: none; box-shadow: none; backdrop-filter: none; }
         .sticky-header {
             position: sticky; top: 0; z-index: 50;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0.8rem 1rem; margin-bottom: 1.5rem;
-            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px);
-            border-radius: var(--radius); box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            padding: 1rem 1.2rem; margin-bottom: 1.5rem;
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px);
+            border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-        .back-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #60a5fa; padding: 0.5rem; }
-        .quiz-title { font-weight: bold; font-size: 1rem; flex-grow: 1; text-align: center; padding: 0 1rem; color: #fff; }
-        .score-box { padding: 0.4rem 0.8rem; border-radius: 20px; background: rgba(255,255,255,0.15); font-weight: bold; font-size: 0.9rem; white-space: nowrap; color: #fff; }
-
-        .q-card { background: var(--card-bg); padding: 1.5rem; margin-bottom: 1.2rem; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.1); transition: opacity 0.3s ease; }
-        .q-card.reveal-anim { animation: fadeSlideIn 0.5s ease forwards; }
-        .q-num { font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem; font-weight: 600; }
-        .q-text { font-size: 1.15rem; margin-bottom: 1rem; line-height: 1.5; font-weight: 600; color: #1e293b; direction: ltr; text-align: left; unicode-bidi: isolate; }
-        .options { display: flex; flex-direction: column; gap: 0.7rem; }
-        .opt { 
-            padding: 1rem; cursor: pointer; border-radius: 10px; background: #f8fafc; 
-            border: 2px solid #e2e8f0; transition: 0.2s; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; color: #334155;
-            direction: ltr; text-align: left; unicode-bidi: isolate;
+        .back-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #60a5fa; padding: 0.5rem; }
+        .quiz-title { font-weight: bold; font-size: 1.1rem; flex-grow: 1; text-align: center; padding: 0 1rem; color: #fff; }
+        .score-box { padding: 0.5rem 1rem; border-radius: 25px; background: rgba(255,255,255,0.1); font-weight: bold; font-size: 0.95rem; white-space: nowrap; color: #fff; border: 1px solid rgba(255,255,255,0.1); }
+        .q-card { background: var(--card-bg); padding: 1.8rem; margin-bottom: 1.5rem; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.2); transition: opacity 0.3s ease; }
+        .q-card.reveal-anim { animation: fadeSlideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .q-num { font-size: 0.9rem; color: #64748b; margin-bottom: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .q-text { font-size: 1.2rem; margin-bottom: 1.5rem; line-height: 1.6; font-weight: 600; color: #1e293b; direction: ltr; text-align: left; unicode-bidi: isolate; }
+        .options { display: flex; flex-direction: column; gap: 0.9rem; }
+        .opt {
+            padding: 1.2rem; cursor: pointer; border-radius: 12px; background: #f8fafc;
+            border: 2px solid #e2e8f0; transition: 0.2s; font-size: 1.05rem; display: flex; align-items: center; gap: 0.8rem; color: #334155;
+            direction: ltr; text-align: left; unicode-bidi: isolate; font-weight: 500;
         }
-        .opt:hover:not(.locked), .opt:active:not(.locked) { transform: none !important; background: #fff; border-color: #93c5fd; }
+        .opt:hover:not(.locked) { background: #fff; border-color: #93c5fd; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .opt.selected-correct { background: #ecfdf5; border-color: var(--success); color: #065f46; }
         .opt.selected-wrong { background: #fef2f2; border-color: var(--danger); color: #991b1b; }
         .opt.show-correct { background: #ecfdf5; border-color: var(--success); color: #065f46; }
-        .opt.locked { pointer-events: none; opacity: 0.85; cursor: default; }
-        .opt::before { content: ''; width: 20px; height: 20px; border-radius: 50%; border: 2px solid #94a3b8; display: inline-block; flex-shrink: 0; }
-        .opt.selected-correct::before, .opt.show-correct::before { background: var(--success); border-color: var(--success); }
-        .opt.selected-wrong::before { background: var(--danger); border-color: var(--danger); }
-
-        .ai-divider { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 1.5rem; border-radius: var(--radius); margin: 2rem 0; text-align: center; box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3); animation: pulse 2s infinite; }
-        .ai-divider h3 { margin-bottom: 0.5rem; font-size: 1.2rem; }
-        .ai-divider button { margin-top: 0.8rem; padding: 0.7rem 1.3rem; border: none; border-radius: 20px; background: white; color: #d97706; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .ai-divider button:hover { transform: scale(1.05); }
+        .opt.locked { pointer-events: none; opacity: 0.8; cursor: default; }
+        .opt::before { content: ''; width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid #94a3b8; display: inline-block; flex-shrink: 0; transition: 0.2s; }
+        .opt.selected-correct::before, .opt.show-correct::before { background: var(--success); border-color: var(--success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+        .opt.selected-wrong::before { background: var(--danger); border-color: var(--danger); box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+        .ai-divider { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 2rem; border-radius: var(--radius); margin: 2.5rem 0; text-align: center; box-shadow: 0 8px 25px rgba(217, 119, 6, 0.4); animation: pulse 3s infinite; }
+        .ai-divider h3 { margin-bottom: 0.8rem; font-size: 1.4rem; }
+        .ai-divider p { font-size: 1rem; opacity: 0.9; margin-bottom: 1rem; }
+        .ai-divider button { padding: 0.8rem 1.8rem; border: none; border-radius: 25px; background: white; color: #d97706; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        .ai-divider button:hover { transform: scale(1.08); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         #emoji-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 999; }
-        .float-emoji { position: absolute; font-size: 2.5rem; animation: floatUp 1.8s ease-out forwards; opacity: 0; }
-        @keyframes floatUp { 0% { transform: translateY(20px) scale(0.5); opacity: 0; } 20% { transform: translateY(0) scale(1.3); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-40px) scale(1); opacity: 0; } }
-        #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { padding: 2rem; max-width: 400px; width: 90%; text-align: center; background: #0f172a; border: 1px solid #334155; border-radius: var(--radius); }
-        .modal-content h3 { color: #fff; margin-bottom: 0.5rem; }
-        .modal-content p { color: #cbd5e1; margin: 1rem 0; line-height: 1.6; }
-        .modal-btns { display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: center; }
-        .action-btn { padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
-        .btn-primary { background: var(--primary); }
-        .btn-danger { background: var(--danger); }
-    </style>
+        .float-emoji { position: absolute; font-size: 3rem; animation: floatUp 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+        @keyframes floatUp { 0% { transform: translateY(20px) scale(0.5); opacity: 0; } 20% { transform: translateY(0) scale(1.4); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-60px) scale(1); opacity: 0; } }
+        #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
+        .modal-content { padding: 2.5rem; max-width: 420px; width: 90%; text-align: center; background: #0f172a; border: 1px solid #334155; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .modal-content h3 { color: #fff; margin-bottom: 0.8rem; font-size: 1.4rem; }
+        .modal-content p { color: #cbd5e1; margin: 1.2rem 0; line-height: 1.7; font-size: 1.05rem; }
+        .modal-btns { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; }
+        .action-btn { padding: 1rem 2rem; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; color: white; transition: 0.3s; font-size: 1rem; flex: 1; }
+        .btn-primary { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .btn-primary:hover { box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }    </style>
 </head>
 <body>
     <canvas id="chem-bg"></canvas>
     <div id="emoji-container"></div>
-    
     <div id="modal-overlay" class="hidden">
         <div class="modal-content glass">
             <h3>لديك تقدم محفوظ 📁</h3>
@@ -121,14 +111,12 @@ Enter<!DOCTYPE html>
             </div>
         </div>
     </div>
-
     <div id="app">
         <div id="home-view" class="glass">
-            <h1>أسئلة الاختيار من متعدد لامتحان الكيمياء العملي النهائي</h1>
+            <h1>أسئلة MCQ<br>لامتحان الكيمياء العملي النهائي</h1>
             <p class="subtitle">by: al_witify</p>
             <div class="grid" id="lecture-grid"></div>
         </div>
-
         <div id="quiz-view" class="hidden">
             <div class="sticky-header glass">
                 <button class="back-btn" onclick="goHome()" title="الرئيسية">🏠</button>
@@ -138,14 +126,13 @@ Enter<!DOCTYPE html>
             <div id="questions-container"></div>
         </div>
     </div>
-
     <script>
-        // --- DATA (Validated & Exact Match) ---
         const rawData = {
             "Blood Glucose": [
                 {q:"In diabetes mellitus, glucagon levels are:", o:["elevated due to high insulin","lowered due to high conversion to glucose","lowered due to low insulin","elevated and not suppressed by carbohydrate loading"], a:3, ai:false},
                 {q:"In the diabetic patient, residual insulin secretion can be monitored by:", o:["glucose tolerance test","C-peptide levels","pancreatic polypeptide levels","insulin levels"], a:1, ai:false},
-                {q:"The determination of glucose tolerance following the oral administration of glucose is recommended as a screening test for the presence of underlying gestational diabetes mellitus. How much gram of glucose is recommended in this tolerance test?", o:["50 grams","100 grams","75 grams","120 grams"], a:1, ai:false},                {q:"According to the WHO criteria, patients with type I diabetes mellitus are, at the time of diagnosis, characterized by all the following except:", o:["hyperglycemia","ketoacidosis","ketonuria","normal weight"], a:3, ai:false},
+                {q:"The determination of glucose tolerance following the oral administration of glucose is recommended as a screening test for the presence of underlying gestational diabetes mellitus. How much gram of glucose is recommended in this tolerance test?", o:["50 grams","100 grams","75 grams","120 grams"], a:1, ai:false},
+                {q:"According to the WHO criteria, patients with type I diabetes mellitus are, at the time of diagnosis, characterized by all the following except:", o:["hyperglycemia","ketoacidosis","ketonuria","normal weight"], a:3, ai:false},
                 {q:"Which of the following statements about type 1 diabetes mellitus are correct:", o:["Formerly known as insulin independent","Adult onset","Caused by autoimmune destruction of the B-cells of the pancreas","The pancreas synthesizes insulin but unable to secrete"], a:2, ai:false},
                 {q:"Which of the following confirmed values meet the diagnostic threshold for diabetes?", o:["fasting blood glucose 140 mg/dl","random glucose >160 mg/dl","2 hour post prandial glucose to 126 mg/dl","fasting blood glucose ≥126 mg/dl"], a:3, ai:false},
                 {q:"Insulin deficiency is associated with:", o:["Reduced lipolysis","Increased ketogenesis","Reduced gluconeogenesis","Reduced proteolysis"], a:1, ai:false},
@@ -158,8 +145,7 @@ Enter<!DOCTYPE html>
                 {q:"The healthy persons maintains the extracellular glucose concentration remarkably constant within the limits of:", o:["90-160 mg/dl","70-100 mg/dl","50-70 mg/dl","70-180 mg/dl"], a:1, ai:false},
                 {q:"Which of the following statements regarding glucose blood samples is/are correct? 1. After a period of fasting, the glucose concentration in venous blood is 5-10% lower than arterial blood. 2. deproteinization will result to glucose decrease. 3. the glucose content of erythrocytes is lower than that in plasma 4. glucose values in venous plasma are 10% lower than those in venous whole blood.", o:["only 1 and 3 are correct","only 1, 2, and 3 are correct","only 2 and 4 are correct","1, 2, 3 and 4 are correct"], a:0, ai:false},
                 {q:"The screening test for gestational diabetes mellitus recommended between 24th to 28th week of gestation requires 50g-75g of glucose dissolved in 200ml of water and slowly drunk. A blood sample is collected after:", o:["30 mins","60 mins","90 mins","120 mins"], a:1, ai:false},
-                {q:"High-risk pregnant patients should undergo immediate testing when they are defined as having which of the following? 1. marked obesity 2. Glycosuria 3. personal history of GDM 4. Strong family history of diabetes.", o:["only 1 and 3 are correct","only 1, 2, and 3 are correct","only 2 and 4 are correct","1, 2, 3 and 4 are correct"], a:3, ai:false},
-                {q:"Which of the following are not the criteria for the diagnosis of diabetes?", o:["Fasting blood glucose >126 mg/dL","2-hour postprandial glucose >140 mg/dL","HbA1C >6.5%","Random blood glucose >200 mg/dL with classical symptoms"], a:1, ai:false},
+                {q:"High-risk pregnant patients should undergo immediate testing when they are defined as having which of the following? 1. marked obesity 2. Glycosuria 3. personal history of GDM 4. Strong family history of diabetes.", o:["only 1 and 3 are correct","only 1, 2, and 3 are correct","only 2 and 4 are correct","1, 2, 3 and 4 are correct"], a:3, ai:false},                {q:"Which of the following are not the criteria for the diagnosis of diabetes?", o:["Fasting blood glucose >126 mg/dL","2-hour postprandial glucose >140 mg/dL","HbA1C >6.5%","Random blood glucose >200 mg/dL with classical symptoms"], a:1, ai:false},
                 {q:"A 55 year old patients diagnosed as prediabetic. Which of the following statement accurately characterize prediabetes?", o:["Fasting blood glucose from 120-180 mg/dL","Fasting blood glucose from 126-140 mg/dL","Fasting blood glucose from 100-125 mg/dL","All of the above"], a:2, ai:false},
                 {q:"In the colorimetric estimation of blood glucose using the glucose oxidase reaction, what is the required volume of the serum or plasma sample?", o:["1 ml","100 microliter","10 microliter","50 microliter"], a:2, ai:true},
                 {q:"At which wavelength should the absorbance of the test and standard be recorded against the blank during the colorimetric estimation of blood glucose?", o:["340 nm","450 nm","510 nm","620 nm"], a:2, ai:true},
@@ -194,7 +180,8 @@ Enter<!DOCTYPE html>
                 {q:"The anemia condition most commonly result from?", o:["Vitamin B-12 deficiency anemia","Sickle cell anemia","Iron-deficiency anemia","Leukemia"], a:2, ai:false},
                 {q:"In suspect Fe deficiency anemia, which lab investigations would you order?", o:["CBC (complete blood count)","Blood smear","Serum iron","Serum ferritin"], a:3, ai:false},
                 {q:"What are heme containing compounds (hemoproteins)?", o:["Hemoglobin, myoglobin, respiratory cytochromes, cytochrome p450, catalase, peroxidase, and tryptophan oxygenase.","Albumin, Globulin, and Fibrinogen.","Cholesterol, Triglycerides, and Bile acids.","Glucose, Fructose, and Galactose."], a:0, ai:false},
-                {q:"What are iron containing proteins?", o:["Trypsin, Pepsin, and Amylase.","Insulin, Glucagon, and Epinephrine.","Hemoglobin, myoglobin, respiratory cytochromes and cytochrome p450.","Lipase, LCAT, and Creatine Kinase."], a:2, ai:false},                {q:"What are the functions of hemoglobin and myoglobin?", o:["Both synthesize proteins in the liver.","Hemoglobin carries oxygen from lungs to tissues and myoglobin stores oxygen in muscles.","Both break down glucose for energy.","Both act as hormones regulating calcium levels."], a:1, ai:false},
+                {q:"What are iron containing proteins?", o:["Trypsin, Pepsin, and Amylase.","Insulin, Glucagon, and Epinephrine.","Hemoglobin, myoglobin, respiratory cytochromes and cytochrome p450.","Lipase, LCAT, and Creatine Kinase."], a:2, ai:false},
+                {q:"What are the functions of hemoglobin and myoglobin?", o:["Both synthesize proteins in the liver.","Hemoglobin carries oxygen from lungs to tissues and myoglobin stores oxygen in muscles.","Both break down glucose for energy.","Both act as hormones regulating calcium levels."], a:1, ai:false},
                 {q:"What are the structural features of hemoglobin A molecule?", o:["It has one subunit and contains one iron atom.","It has two subunits and contains no iron atoms.","It has six subunits and contains two iron atoms.","Hb A has four subunits, two α and two β units. It contains 4 iron atoms."], a:3, ai:false},
                 {q:"How many molecules of oxygen can bind with hemoglobin?", o:["One","Two","Three","Four"], a:3, ai:false},
                 {q:"What are the structural features of myoglobin molecule?", o:["It has one subunit, and contains one iron atom.","It has four subunits and four iron atoms.","It has two subunits and two iron atoms.","It is a completely lipid-based structure with no iron."], a:0, ai:false},
@@ -207,8 +194,7 @@ Enter<!DOCTYPE html>
                 {q:"What is the expected normal hemoglobin level at birth?", o:["10-14 g/dL","12-16 g/dL","13-17 g/dL","16-23 g/dL"], a:3, ai:true},
                 {q:"Which of the following conditions is a recognized cause of secondary polycythemia (an above-normal hemoglobin level)?", o:["Excessive bleeding","Malignant variation in blood cell production in the bone marrow","Living at high altitudes","Iron deficiency"], a:2, ai:true},
                 {q:"A below-normal hemoglobin level indicating anemia can be the result of all the following EXCEPT:", o:["Excessive destruction of red blood cells","Heavy smoking","Kidney disease","Bone marrow failure"], a:1, ai:true},
-                {q:"In a clinical assessment, what is the generally expected relationship between a healthy individual's hemoglobin level and their hematocrit level?", o:["The hemoglobin level should be equal to the hematocrit level","The hemoglobin level should be 1/2 of the hematocrit level","The hemoglobin level should be 1/3 of the hematocrit level","The hemoglobin level should be 2/3 of the hematocrit level"], a:2, ai:true},
-                {q:"Sickle cell hemoglobin (HbS) is a hemoglobinopathy characterized by which specific amino acid substitution?", o:["Glutamic acid for Valine at the 6th position in the alpha chain","Valine for Glutamic acid at the 6th position in the beta chain","Lysine for Glutamic acid at the 6th position in the beta chain","Valine for Glutamic acid at the 6th position in the alpha chain"], a:1, ai:true},
+                {q:"In a clinical assessment, what is the generally expected relationship between a healthy individual's hemoglobin level and their hematocrit level?", o:["The hemoglobin level should be equal to the hematocrit level","The hemoglobin level should be 1/2 of the hematocrit level","The hemoglobin level should be 1/3 of the hematocrit level","The hemoglobin level should be 2/3 of the hematocrit level"], a:2, ai:true},                {q:"Sickle cell hemoglobin (HbS) is a hemoglobinopathy characterized by which specific amino acid substitution?", o:["Glutamic acid for Valine at the 6th position in the alpha chain","Valine for Glutamic acid at the 6th position in the beta chain","Lysine for Glutamic acid at the 6th position in the beta chain","Valine for Glutamic acid at the 6th position in the alpha chain"], a:1, ai:true},
                 {q:"Under what specific condition does HbS precipitate into crystals, causing the red blood cells to change shape and become sickle-shaped?", o:["In high oxygen tension","When exposed to alkaline pH","In low oxygen tension (when HbS is reduced)","During high carbon dioxide tension"], a:2, ai:true},
                 {q:"The pathological condition known as beta-thalassemia major is characterized by:", o:["A single amino acid substitution of Valine for Glutamic acid","Defective synthesis of the alpha-globin chain","Increased levels of fetal hemoglobin (HbF) due to defective beta-globin chain synthesis","Abnormal synthesis of the heme porphyrin ring"], a:2, ai:true}
             ],
@@ -224,7 +210,7 @@ Enter<!DOCTYPE html>
                 {q:"Albumin plays a key role in maintaining which of the following?", o:["Blood glucose levels","Oncotic pressure","Body temperature","Blood urea levels"], a:1, ai:false},
                 {q:"The albumin-BCG complex absorbs light maximally at what wavelength?", o:["420 nm","520 nm","628 nm","600 nm"], a:2, ai:false},
                 {q:"Most plasma proteins are synthesized in the liver. Which of the following proteins is an exception and is synthesized in plasma cells?", o:["Albumin","Fibrinogen","γ-globulins","Prealbumin"], a:2, ai:true},
-                {q:"Almost all plasma proteins are chemically classified as glycoproteins, with the exception of:", o:["Transferrin","Immunoglobulins","α_1-Antitrypsin","Albumin"], a:3, ai:true},
+                {q:"Almost all plasma proteins are chemically classified as glycoproteins, with the exception of:", o:["Transferrin","Immunoglobulins","α₁-Antitrypsin","Albumin"], a:3, ai:true},
                 {q:"In the Biuret method for total protein determination, which of the following ions reacts with peptide bonds in an alkaline solution to form a colored complex?", o:["Fe²⁺","Cu²⁺","Zn²⁺","Mg²⁺"], a:1, ai:true},
                 {q:"The Biuret reaction produces a specific colored complex that is measured spectrophotometrically. What is the color of this complex and its optimal measuring wavelength?", o:["Violet color measured at 540 nm","Blue color measured at 628 nm","Red color measured at 415 nm","Yellow color measured at 450 nm"], a:0, ai:true},
                 {q:"Physiological variability can influence the concentration of plasma proteins. Which of the following factors is known to cause a physiological INCREASE in total protein concentration?", o:["Starvation","Stand-up position","Pregnancy","Childhood"], a:1, ai:true},
@@ -243,7 +229,8 @@ Enter<!DOCTYPE html>
                 {q:"Which of the following conditions is considered a post-renal cause of elevated serum urea (azotemia)?", o:["Acute Glomerulonephritis","Dehydration","Congestive heart failure","Benign enlargement of the prostate"], a:3, ai:true},
                 {q:"Which of the following factors can cause a physiological decrease in Blood Urea Nitrogen (BUN) levels?", o:["High protein diet","Older age with the inability to concentrate urine","A combination of a low-protein and high-carbohydrate diet","Severe gastrointestinal hemorrhage"], a:2, ai:true},
                 {q:"In the measurement of urea using the Berthelot reaction, ammonia reacts with phenol and hypochlorite to produce a specific colored compound. What is the color of this compound and at which wavelength is it optimally measured?", o:["Brown compound measured at 450 nm","Blue compound (Indophenol) measured at 540 nm","Red compound measured at 510 nm","Violet compound measured at 540 nm"], a:1, ai:true},
-                {q:"A 55-year-old diabetic patient has a BUN of 75 mg/dL and a serum creatinine of 6.0 mg/dL. The BUN/Creatinine ratio is approximately 12:1. These findings are most indicative of:", o:["Pre-renal failure","Renal cause (e.g., acute kidney injury)","Post-renal obstruction","Advanced liver cirrhosis"], a:1, ai:true}            ],
+                {q:"A 55-year-old diabetic patient has a BUN of 75 mg/dL and a serum creatinine of 6.0 mg/dL. The BUN/Creatinine ratio is approximately 12:1. These findings are most indicative of:", o:["Pre-renal failure","Renal cause (e.g., acute kidney injury)","Post-renal obstruction","Advanced liver cirrhosis"], a:1, ai:true}
+            ],
             "Creatinine": [
                 {q:"Creatinine clearance is decreased in:", o:["Glomerulonephritis","Urinary obstruction","Hypertension","Starvation"], a:0, ai:false},
                 {q:"A patient's blood urea is 30 mg/dl and his creatinine is 5.0 mg/dl. What conclusion would you draw from these results, Patient?", o:["is normal","is in early stage of renal failure","has suffered muscle deterioration","One of the values is in error"], a:3, ai:false},
@@ -256,8 +243,7 @@ Enter<!DOCTYPE html>
                 {q:"The formula for calculating the Glomerular Filtration Rate (GFR) typically takes into account the serum creatinine level along with other factors such as:", o:["Age, race, and sex","Height, weight, and blood pressure","Liver enzymes and fasting blood sugar","Urine output volume only"], a:0, ai:true},
                 {q:"In the clearance formula C = (U x V) / P, what does \"V\" represent?", o:["Velocity of blood flow","Volume of plasma cleared per minute","Volume of urine in ml excreted per minute","Venous pressure"], a:2, ai:true},
                 {q:"A 78-year-old bedridden female with advanced Rheumatoid Arthritis shows a serum creatinine level of 0.3 mg/dL. This decreased level is most likely attributed to:", o:["Impaired renal function","Severe muscle wasting","Obstruction of the urinary tract","High intake of red meat"], a:1, ai:true}
-            ],
-            "Bilirubin": [
+            ],            "Bilirubin": [
                 {q:"In obstructive jaundice, urinary Bilirubin is:", o:["Absent","Increased","Present","Present in small amount"], a:1, ai:false},
                 {q:"A positive urine for bilirubin can be caused by the presence of:", o:["unconjugated bilirubin","conjugated bilirubin","delta bilirubin","urobilinogen"], a:1, ai:false},
                 {q:"A diagnosis of hemolytic anemia in adult would be confirmed by the following findings:", o:["urobilinogen excretion increased","Increased plasma ALP","Increased plasma ALT","Increased plasma haptoglobin"], a:0, ai:false},
@@ -292,7 +278,8 @@ Enter<!DOCTYPE html>
                 {q:"Alkaline phosphatase (ALP) is particularly concentrated in specific tissues. Which of the following combinations represents tissues with the highest ALP concentrations?", o:["Brain, heart, and skeletal muscle","Liver, bone, bile duct, kidney, and placenta","Lungs, spleen, and pancreas","Stomach, intestines, and skin"], a:1, ai:true},
                 {q:"To determine the exact tissue source of an elevated total ALP in the blood, the detection of isoenzymes is utilized. Which isoenzyme is mainly produced in the liver?", o:["ALP-I","ALP-II","ALP-III","ALP-IV"], a:0, ai:true},
                 {q:"Serum Alkaline Phosphatase (ALP) can increase physiologically under normal, non-pathological conditions in which of the following groups?", o:["Elderly males","Pregnant women and children (during bone healing)","Individuals on a high-protein diet","Patients with chronic alcoholism"], a:1, ai:true},
-                {q:"In the routine laboratory assay for GPT (ALT) and GOT (AST), which chemical reagent is used to convert oxaloacetate and pyruvate into a derivative that can be measured spectrophotometrically?", o:["Picric acid","2,4-dinitrophenylhydrazine","Sulfanilic acid","Ninhydrin"], a:1, ai:true},                {q:"In the coupled enzymatic reaction for transaminase assays, the intensely colored 2,4-dinitrophenylhydrazine derivatives are measured at which wavelength using a spectrophotometer?", o:["490 nm","510 nm","546 nm","600 nm"], a:2, ai:true},
+                {q:"In the routine laboratory assay for GPT (ALT) and GOT (AST), which chemical reagent is used to convert oxaloacetate and pyruvate into a derivative that can be measured spectrophotometrically?", o:["Picric acid","2,4-dinitrophenylhydrazine","Sulfanilic acid","Ninhydrin"], a:1, ai:true},
+                {q:"In the coupled enzymatic reaction for transaminase assays, the intensely colored 2,4-dinitrophenylhydrazine derivatives are measured at which wavelength using a spectrophotometer?", o:["490 nm","510 nm","546 nm","600 nm"], a:2, ai:true},
                 {q:"The enzyme gamma-glutamyltransferase (GGT) catalyzes the transfer of amino acids across membranes and is primarily involved in the metabolism of which important antioxidant?", o:["Ascorbic acid","Glutathione","Uric acid","Bilirubin"], a:1, ai:true},
                 {q:"A patient presents with elevated plasma ALP levels. To differentiate whether the source of the ALP elevation is due to liver disease or bone disease, which of the following tests is most highly sensitive and specific?", o:["AST","ALT","GGT","Total Bilirubin"], a:2, ai:true},
                 {q:"GGT is particularly useful in clinical diagnostics because its levels are consistently NOT increased in which of the following conditions despite an elevated ALP?", o:["Bone disease","Biliary obstruction","Chronic alcohol ingestion","Hepatocellular dysfunction"], a:0, ai:true},
@@ -300,15 +287,42 @@ Enter<!DOCTYPE html>
                 {q:"In severe liver diseases such as biliary obstruction (cholestasis), the elevation of which enzyme strongly parallels the elevation of ALP?", o:["ALT","AST","SGOT","GGT"], a:3, ai:true},
                 {q:"According to the laboratory procedures for measuring GPT (ALT), after incubating the serum with the substrate for exactly 30 minutes, what is added immediately before allowing the tubes to stand for 20 minutes at room temperature?", o:["0.4 M NaOH","Distilled water","2,4-dinitrophenylhydrazine","Alkaline picrate"], a:2, ai:true},
                 {q:"A 60-year-old woman presents with severe itching, dark urine, pale stools, and progressive jaundice. Her lab results show ALT = 95 U/L, AST = 88 U/L, ALP = 620 U/L, and GGT = 500 U/L. This enzymatic pattern is most consistent with:", o:["Acute viral hepatitis","Alcoholic liver disease","Hemolytic anemia","Obstructive liver injury (cholestasis)"], a:3, ai:true}
+            ],
+            "Mid exam 1st & 2nd course": [
+                {q:"A laboratory test for a 35-year-old male patient's were: fasting plasma glucose level is 130 mg/dL and the 2-hour oral glucose tolerance test is 190 mg/dL. What is the next step in the diagnosis for diabetes mellitus for this patient?", o:["The oral glucose tolerance test will be repeated.","The fasting plasma glucose test will be repeated.","No further testing is required; the diagnosis is excluded.","No further testing is required; the diagnosis is confirmed."], a:3, ai:false},
+                {q:"Patients with uncontrolled diabetes experience polyuria because:", o:["they drink excess amounts of water due to dehydration.","excess glucose in the blood is excreted by the kidneys.","low blood glucose levels result in cellular dehydration.","high blood sugar levels cause permanent kidney damage."], a:1, ai:false},
+                {q:"Which of the following complications is less likely to occur in type 2 diabetics, as opposed to type 1 diabetics?", o:["Retinopathy","Weight gain","Cardiovascular disease","Hypoglycemic coma"], a:3, ai:false},
+                {q:"A 15-year-old type 1 diabetic faints after injecting himself with insulin. He is administered glucagon and rapidly recovers. Glucagon induces activity of:", o:["Glycogen synthase","Glycogen phosphorylase","Glucokinase","Hexokinase"], a:1, ai:false},                {q:"A 30-year-old presents with intractable vomiting and inability to eat or drink for the past 3 days. His blood glucose level is normal. Which of the following is most important for maintenance of blood glucose?", o:["Liver","Heart","Skeletal muscle","Lysosome"], a:0, ai:false},
+                {q:"A 15-year-old male presents with increased thirst, hunger, urination, and weight loss. His fasting blood glucose level is 400 mg/dL and is diagnosed with type 1 diabetes mellitus. What is the reason for the patient's inability to maintain a normal blood glucose level?", o:["Decreased uptake of glucose by peripheral cells","Abnormal response to glucagon","Decreased glucagon to insulin ratio","Decreased glucose output by the liver"], a:0, ai:false},
+                {q:"When assessing a 56-year-old unconscious diabetic patient, the primary visible difference between hyperglycemia and hypoglycemia is the:", o:["patient's mental status.","rate of the patient's pulse.","presence of a medical identification tag.","rate and depth of breathing."], a:3, ai:false},
+                {q:"A 52-year-old woman with suspected diabetes mellitus has an oral glucose tolerance test, following the standard WHO protocol. The following results are obtained: Time (hours) 0: 100 mg/dL, Time (hours) 1: 151 mg/dL. How should these results be interpreted?", o:["Impaired fasting glucose and impaired glucose tolerance","Normal","Diabetes mellitus","Impaired glucose tolerance"], a:1, ai:false},
+                {q:"A definite diagnosis of diabetes mellitus is excluded by which of the following?", o:["HbA1c < 6.5%","Fasting glucose > 126 mg/dL","2-hour post 75 g oral glucose tolerance test is 138 mg/dL","Random glucose 216 mg/dL"], a:0, ai:false},
+                {q:"An oral glucose tolerance test after three days of increased carbohydrate intake is the only reliable means of diagnosis in suspected diabetes. Which of the following would be considered diagnostic in pregnancy?", o:["A fasting blood sugar of 110 mg/100 mL","A fasting blood sugar of 90 mg/100 mL and a three-hour value of 100 mg/100 mL","A fasting blood sugar of 95 mg/100 mL and a two-hour value of 165 mg/100 mL","A two-hour value of 109 mg/100 mL"], a:2, ai:false},
+                {q:"The elimination of _____ in the urine represents the major route for nitrogen excretion.", o:["urea","creatinine","uric acid","none of them"], a:0, ai:false},
+                {q:"Urea is formed in the liver from _____.", o:["ammonia and arginine","creatin","uric acid","lysine"], a:0, ai:false},
+                {q:"Azotemia occurs due to _____.", o:["Malnutrition","Over hydration","bleeding in the gastrointestinal tract","Severe liver damage"], a:2, ai:false},
+                {q:"Creatinine is overproduced in the blood due to _____.", o:["Rhabdomyolysis","Wilson's disease","decrease the breakdown of","high dose aspirin"], a:0, ai:false},
+                {q:"_____ is used in the enzymatic method for measuring serum creatinine.", o:["Lactate hydrogenase","xanthine oxidase","peroxidase","Pyruvate kinase"], a:2, ai:false},
+                {q:"High BUN values occur due to _____.", o:["over hydration","heart failure","Direct damage of the liver","none of the above"], a:3, ai:false},
+                {q:"One of the causes for urea plasma elevation is postrenal which refers to _____.", o:["acute tubular necrosis","renal hypoperfusion","obstruction of urinary flow","all of the above"], a:2, ai:false},
+                {q:"Hypoproteinemia is serum protein level _____.", o:["< 5.7 g/dL","> 6.7 g/dL","< 8.6 g/dL","< 6.7 g/dL"], a:0, ai:false},
+                {q:"High levels of plasma Ca++ levels stimulate the secretion of _____.", o:["renal phosphate","Parathyroid hormone","calcitonin","1-alpha-hydroxylase"], a:2, ai:false},
+                {q:"Creatine is synthesized in the liver from _____.", o:["lysine, methionine, arginine","glycine, methionine, arginine","lysine, cysteine, arginine","glycine, cysteine, arginine"], a:1, ai:false},
+                {q:"The normal values of Serum albumin are _____.", o:["3.5 - 5.0 g/dL","2.0 - 3.5 g/dL","1.5 - 2.5 g/dL","3.0 - 5.0 g/dL"], a:0, ai:false},
+                {q:"Why is measurement of plasma creatinine more precise than urinary creatinine clearance?", o:["Urine collection is dependent on the patient, which can introduce errors","Plasma creatinine is more abundant in the body than urinary creatinine","Urinary creatinine is more prone to degradation than plasma creatinine","Urine creatinine clearance is affected by hydration status, which can skew results"], a:0, ai:false},
+                {q:"Low values of blood urea nitrogen occur due to _____.", o:["gallstones","hemolytic anemia","Severe liver damage","biliary stricture"], a:2, ai:false},
+                {q:"A 60-year-old male with a history of heart failure presents with worsening dyspnea and edema. His serum creatinine levels are elevated, and his urine output is decreased. What is the likely cause of his renal dysfunction?", o:["Cardiorenal syndrome","Acute kidney injury (AKI)","Chronic kidney disease (CKD)","Dehydration"], a:1, ai:false},
+                {q:"The normal range of creatinine clearance in males?", o:["90-135 mL/minute","85-105 mL/minute","105 ± 20 mL/minute","95 ± 20 mL/minute"], a:0, ai:false},
+                {q:"Which of the following conditions is most likely to cause a decrease in total serum protein levels?", o:["Dehydration","Liver disease","Nephrotic syndrome","Multiple myeloma"], a:2, ai:false},
+                {q:"A patient presents with a total serum protein of 8.0 g/dL and an albumin of 4.5 g/dL. What is the albumin-globulin ratio?", o:["1.33","1.50","1.75","2.0"], a:0, ai:false}
             ]
         };
 
         let state = { currentLecture: null, questions: [], answers: {}, score: 0, isMixed: false, aiUnlocked: false };
-        const correctEmojis = ['❤️‍🔥', '🌟', '🔥', '💯', '❤️', '💪'];
-        const wrongEmojis = ['😑', '🤦', '❌', '💔', '💤'];
-
-        // --- FIXED AUDIO SYSTEM ---
+        const correctEmojis = ['❤️‍🔥','🌟','🔥','💯','❤️','💪'];
+        const wrongEmojis = ['😑','🤦','❌','💔','💤'];
         let audioCtx;
+
         function initAudio() {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const unlock = () => { if (audioCtx.state === 'suspended') audioCtx.resume(); };
@@ -319,35 +333,30 @@ Enter<!DOCTYPE html>
         function playSound(type) {
             if (!audioCtx) return;
             if (audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             const now = audioCtx.currentTime;
             if (type === 'correct') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(523.25, now);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
                 osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
-                gain.gain.setValueAtTime(0.3, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
                 osc.start(now); osc.stop(now + 0.3);
-            } else {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(300, now);
+            } else {                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now);
                 osc.frequency.exponentialRampToValueAtTime(200, now + 0.15);
-                gain.gain.setValueAtTime(0.25, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
                 osc.start(now); osc.stop(now + 0.25);
             }
         }
 
         function showEmoji(correct) {
-            const container = document.getElementById('emoji-container');            const el = document.createElement('div');
+            const container = document.getElementById('emoji-container');
+            const el = document.createElement('div');
             el.className = 'float-emoji';
             el.textContent = correct ? correctEmojis[Math.floor(Math.random()*6)] : wrongEmojis[Math.floor(Math.random()*5)];
             el.style.left = Math.random() * 80 + 10 + '%';
             el.style.top = Math.random() * 40 + 40 + '%';
             container.appendChild(el);
-            setTimeout(() => el.remove(), 1800);
+            setTimeout(() => el.remove(), 2000);
         }
 
         function initHome() {
@@ -367,9 +376,9 @@ Enter<!DOCTYPE html>
             grid.appendChild(mixBtn);
         }
 
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; }
-            return array;
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
+            return arr;
         }
 
         function startQuiz(lectureName, isMixed = false) {
@@ -382,7 +391,6 @@ Enter<!DOCTYPE html>
             renderQuiz();
             saveProgress();
         }
-
         function renderQuiz() {
             const container = document.getElementById('questions-container');
             container.innerHTML = '';
@@ -392,36 +400,29 @@ Enter<!DOCTYPE html>
             updateScore();
             const isLec8 = state.currentLecture === 'Liver Enzymes';
             const showAI = state.isMixed || isLec8 || state.aiUnlocked;
-
             state.questions.forEach((q, idx) => {
                 const isAI = q.ai;
                 const shouldHide = isAI && !showAI;
                 const card = document.createElement('div');
                 card.className = `q-card glass ${shouldHide ? 'ai-hidden' : ''} ${isAI ? 'ai-card' : ''}`;
-                card.innerHTML = `
-                    <div class="q-num">السؤال ${q.id}</div>
-                    <div class="q-text">${q.q}</div>
-                    <div class="options" id="opts-${idx}">
-                        ${q.o.map((opt, optIdx) => `<div class="opt" onclick="handleOption(${idx}, ${optIdx})">${opt}</div>`).join('')}
-                    </div>`;
+                card.innerHTML = `<div class="q-num">السؤال ${q.id}</div><div class="q-text">${q.q}</div><div class="options" id="opts-${idx}">${q.o.map((opt, oi) => `<div class="opt" onclick="handleOption(${idx},${oi})">${opt}</div>`).join('')}</div>`;
                 container.appendChild(card);
-                if (state.answers[idx] !== undefined) lockQuestion(idx, state.answers[idx], q.a, false);
+                if (state.answers[idx] !== undefined) lockQuestion(idx, state.answers[idx], q.a);
             });
-
             if (!state.isMixed && !isLec8 && !state.aiUnlocked) {
-                const divider = document.createElement('div');
-                divider.className = 'ai-divider glass';
-                divider.id = 'ai-transition-divider';
-                divider.innerHTML = `<h3>🎉 انتهت أسئلة السنوات السابقة</h3><p>هل تريد المتابعة مع أسئلة الذكاء الاصطناعي؟</p><button onclick="unlockAI()">نعم، أكمل الأسئلة</button>`;
-                container.appendChild(divider);
+                const div = document.createElement('div');
+                div.className = 'ai-divider glass';
+                div.id = 'ai-transition-divider';
+                div.innerHTML = '<h3>🎉 انتهت أسئلة السنوات السابقة</h3><p>هل تريد المتابعة مع أسئلة الذكاء الاصطناعي؟</p><button onclick="unlockAI()">نعم، أكمل الأسئلة</button>';
+                container.appendChild(div);
             }
         }
 
         function unlockAI() {
             state.aiUnlocked = true;
             saveProgress();
-            const divider = document.getElementById('ai-transition-divider');
-            if (divider) divider.style.display = 'none';
+            const div = document.getElementById('ai-transition-divider');
+            if (div) div.style.display = 'none';
             document.querySelectorAll('.ai-card.ai-hidden').forEach((card, i) => {
                 card.classList.remove('ai-hidden');
                 card.classList.add('reveal-anim');
@@ -429,14 +430,14 @@ Enter<!DOCTYPE html>
             });
         }
 
-        function handleOption(qIdx, selectedIdx) {
+        function handleOption(qIdx, selIdx) {
             if (state.answers[qIdx] !== undefined) return;
             const correct = state.questions[qIdx].a;
-            state.answers[qIdx] = selectedIdx;
-            if (selectedIdx === correct) { state.score++; playSound('correct'); showEmoji(true); }
+            state.answers[qIdx] = selIdx;
+            if (selIdx === correct) { state.score++; playSound('correct'); showEmoji(true); }
             else { playSound('wrong'); showEmoji(false); }
             updateScore();
-            lockQuestion(qIdx, selectedIdx, correct, true);
+            lockQuestion(qIdx, selIdx, correct);
             saveProgress();
         }
         function lockQuestion(qIdx, selected, correct) {
@@ -478,61 +479,47 @@ Enter<!DOCTYPE html>
             goHome();
         }
 
-        // --- CHEMISTRY BACKGROUND ANIMATION ---
         const canvas = document.getElementById('chem-bg');
         const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); }
-        function initParticles() {
-            particles = [];
-            const count = window.innerWidth < 768 ? 35 : 70;
-            for (let i = 0; i < count; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,                    vx: (Math.random() - 0.5) * 0.6, vy: (Math.random() - 0.5) * 0.6,
-                    size: Math.random() * 3 + 1.5, opacity: Math.random() * 0.4 + 0.1
-                });
-            }
+        let atoms = [], hexagons = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initBg(); }
+        function initBg() {
+            atoms = []; hexagons = [];
+            const w = canvas.width, h = canvas.height;
+            const ac = w < 768 ? 45 : 90;
+            for (let i = 0; i < ac; i++) atoms.push({ x: Math.random()*w, y: Math.random()*h, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5, size: Math.random()*3+1.5, color: Math.random()>0.7 ? 'rgba(56,189,248,' : 'rgba(167,139,250,' });
+            const hc = w < 768 ? 10 : 25;            for (let i = 0; i < hc; i++) hexagons.push({ x: Math.random()*w, y: Math.random()*h, size: Math.random()*40+20, rotation: Math.random()*Math.PI*2, speed: (Math.random()-0.5)*0.002, opacity: Math.random()*0.08+0.02 });
         }
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Draw bonds
-            ctx.strokeStyle = 'rgba(147, 197, 253, 0.12)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 110) {
-                        ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-                    }
-                }
-            }
-            // Draw & update atoms
-            particles.forEach(p => {
+        function drawHex(x, y, s, r, o) {
+            ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.beginPath();
+            for (let i = 0; i < 6; i++) { const a = (Math.PI/3)*i; const hx = s*Math.cos(a), hy = s*Math.sin(a); i===0 ? ctx.moveTo(hx,hy) : ctx.lineTo(hx,hy); }
+            ctx.closePath(); ctx.strokeStyle = `rgba(148,163,184,${o})`; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+        }
+        function animateBg() {
+            const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            g.addColorStop(0, '#0f172a'); g.addColorStop(0.5, '#1e3a8a'); g.addColorStop(1, '#064e3b');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            hexagons.forEach(h => { h.rotation += h.speed; drawHex(h.x, h.y, h.size, h.rotation, h.opacity); });
+            atoms.forEach((p, i) => {
                 p.x += p.vx; p.y += p.vy;
                 if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                ctx.fillStyle = `rgba(186, 230, 253, ${p.opacity})`;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+                for (let j = i+1; j < atoms.length; j++) {
+                    const p2 = atoms[j], dx = p.x-p2.x, dy = p.y-p2.y, d = Math.sqrt(dx*dx+dy*dy);
+                    if (d < 120) { ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.strokeStyle = `rgba(147,197,253,${0.15*(1-d/120)})`; ctx.lineWidth = 1; ctx.stroke(); }
+                }
+                ctx.fillStyle = p.color + '0.8)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+                ctx.shadowBlur = 10; ctx.shadowColor = p.color + '1)'; ctx.fill(); ctx.shadowBlur = 0;
             });
-            requestAnimationFrame(animateParticles);
+            requestAnimationFrame(animateBg);
         }
         window.addEventListener('resize', resizeCanvas);
-
-        // Safe Init
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                initAudio();
-                initHome();
-                resizeCanvas();
-                animateParticles();
+                initAudio(); initHome(); resizeCanvas(); animateBg();
                 if (localStorage.getItem('chemQuizState')) document.getElementById('modal-overlay').classList.remove('hidden');
-            } catch (e) {
-                console.error('Init Error:', e);
-            }
+            } catch (e) { console.error('Init Error:', e); }
         });
     </script>
 </body>
-          </html>
+</html>
