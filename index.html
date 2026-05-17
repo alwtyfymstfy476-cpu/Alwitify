@@ -1,525 +1,886 @@
-here<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Practical Chemistry Final Exam MCQs</title>
-    <style>
-        :root {
-            --glass: rgba(255,255,255,0.12);
-            --glass-border: rgba(255,255,255,0.2);
-            --card-bg: rgba(255,255,255,0.85);
-            --primary: #3b82f6;
-            --success: #10b981;
-            --danger: #ef4444;
-            --radius: 14px;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        html { overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
-        body {
-            min-height: 100vh;
-            background: #000;
-            color: #e2e8f0;
-            padding-bottom: 50px;
-            touch-action: pan-y;
-            -webkit-tap-highlight-color: transparent;
-            overscroll-behavior-y: contain;
-        }
-        #chem-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        .glass {
-            background: var(--glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-        }
-        #app { position: relative; z-index: 10; max-width: 900px; margin: 0 auto; padding: 1.5rem; }
-        .hidden { display: none !important; }
-        .ai-hidden { display: none !important; }
-        #home-view { padding: 2.5rem 1.5rem; text-align: center; margin-top: 2rem; }
-        h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); letter-spacing: -0.5px; }
-        .subtitle { font-size: 1.1rem; color: #94a3b8; margin-bottom: 2.5rem; font-weight: 500; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
-        .card-btn {
-            padding: 1.5rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            background: rgba(255,255,255,0.9); border-radius: var(--radius); font-weight: bold; color: #0f172a;
-            display: flex; align-items: center; justify-content: center; min-height: 80px; gap: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-        .card-btn:hover, .card-btn:active { transform: none !important; background: #fff; box-shadow: 0 12px 30px rgba(0,0,0,0.3); }        .card-btn.mixed { background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%); color: white; }
-        .q-count { font-size: 0.85em; opacity: 0.6; font-weight: normal; margin-right: 6px; }
-        #quiz-view { background: transparent; border: none; box-shadow: none; backdrop-filter: none; }
-        .sticky-header {
-            position: sticky; top: 0; z-index: 50;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 1.2rem; margin-bottom: 1.5rem;
-            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px);
-            border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        }
-        .back-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #60a5fa; padding: 0.5rem; }
-        .quiz-title { font-weight: bold; font-size: 1.1rem; flex-grow: 1; text-align: center; padding: 0 1rem; color: #fff; }
-        .score-box { padding: 0.5rem 1rem; border-radius: 25px; background: rgba(255,255,255,0.1); font-weight: bold; font-size: 0.95rem; white-space: nowrap; color: #fff; border: 1px solid rgba(255,255,255,0.1); }
-        .q-card { background: var(--card-bg); padding: 1.8rem; margin-bottom: 1.5rem; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.2); transition: opacity 0.3s ease; }
-        .q-card.reveal-anim { animation: fadeSlideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        .q-num { font-size: 0.9rem; color: #64748b; margin-bottom: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .q-text { font-size: 1.2rem; margin-bottom: 1.5rem; line-height: 1.6; font-weight: 600; color: #1e293b; direction: ltr; text-align: left; unicode-bidi: isolate; }
-        .options { display: flex; flex-direction: column; gap: 0.9rem; }
-        .opt {
-            padding: 1.2rem; cursor: pointer; border-radius: 12px; background: #f8fafc;
-            border: 2px solid #e2e8f0; transition: 0.2s; font-size: 1.05rem; display: flex; align-items: center; gap: 0.8rem; color: #334155;
-            direction: ltr; text-align: left; unicode-bidi: isolate; font-weight: 500;
-        }
-        .opt:hover:not(.locked) { background: #fff; border-color: #93c5fd; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .opt.selected-correct { background: #ecfdf5; border-color: var(--success); color: #065f46; }
-        .opt.selected-wrong { background: #fef2f2; border-color: var(--danger); color: #991b1b; }
-        .opt.show-correct { background: #ecfdf5; border-color: var(--success); color: #065f46; }
-        .opt.locked { pointer-events: none; opacity: 0.8; cursor: default; }
-        .opt::before { content: ''; width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid #94a3b8; display: inline-block; flex-shrink: 0; transition: 0.2s; }
-        .opt.selected-correct::before, .opt.show-correct::before { background: var(--success); border-color: var(--success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
-        .opt.selected-wrong::before { background: var(--danger); border-color: var(--danger); box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
-        .ai-divider { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 2rem; border-radius: var(--radius); margin: 2.5rem 0; text-align: center; box-shadow: 0 8px 25px rgba(217, 119, 6, 0.4); animation: pulse 3s infinite; }
-        .ai-divider h3 { margin-bottom: 0.8rem; font-size: 1.4rem; }
-        .ai-divider p { font-size: 1rem; opacity: 0.9; margin-bottom: 1rem; }
-        .ai-divider button { padding: 0.8rem 1.8rem; border: none; border-radius: 25px; background: white; color: #d97706; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1rem; }
-        .ai-divider button:hover { transform: scale(1.08); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        #emoji-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 999; }
-        .float-emoji { position: absolute; font-size: 3rem; animation: floatUp 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
-        @keyframes floatUp { 0% { transform: translateY(20px) scale(0.5); opacity: 0; } 20% { transform: translateY(0) scale(1.4); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-60px) scale(1); opacity: 0; } }
-        #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
-        .modal-content { padding: 2.5rem; max-width: 420px; width: 90%; text-align: center; background: #0f172a; border: 1px solid #334155; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .modal-content h3 { color: #fff; margin-bottom: 0.8rem; font-size: 1.4rem; }
-        .modal-content p { color: #cbd5e1; margin: 1.2rem 0; line-height: 1.7; font-size: 1.05rem; }
-        .modal-btns { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; }
-        .action-btn { padding: 1rem 2rem; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; color: white; transition: 0.3s; font-size: 1rem; flex: 1; }
-        .btn-primary { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .btn-primary:hover { box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mid-Course Exam MCQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --glow: #00ffc8;
+    --glow2: #00b4ff;
+    --glow3: #7b2fff;
+    --correct: #00e5a0;
+    --wrong: #ff4466;
+    --card-bg: rgba(0, 20, 40, 0.75);
+    --text: #d0faff;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #000d1a;
+    color: var(--text);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ===== ANIMATED BACKGROUND ===== */
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -2;
+  }
+
+  /* Deep ocean gradient layers */
+  #ocean-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background:
+      radial-gradient(ellipse 120% 60% at 50% 110%, #001a3a 0%, transparent 60%),
+      radial-gradient(ellipse 80% 40% at 20% 80%, #003060 0%, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 60%, #002244 0%, transparent 50%),
+      linear-gradient(180deg, #000510 0%, #000d1a 40%, #001225 70%, #000d1a 100%);
+  }
+
+  /* Floating particles */
+  .particle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(110vh) translateX(0) scale(0.5); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-10vh) translateX(var(--drift)) scale(1); opacity: 0; }
+  }
+
+  /* Jellyfish */
+  .jellyfish {
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+    animation: jellydrift linear infinite;
+    opacity: 0.15;
+  }
+
+  .jellyfish svg {
+    filter: drop-shadow(0 0 12px var(--glow)) drop-shadow(0 0 30px var(--glow2));
+    animation: jellypulse 3s ease-in-out infinite;
+  }
+
+  @keyframes jellydrift {
+    0%   { transform: translate(0, 110vh); }
+    100% { transform: translate(var(--jdrift), -20vh); }
+  }
+
+  @keyframes jellypulse {
+    0%, 100% { transform: scaleY(1) scaleX(1); }
+    50%       { transform: scaleY(0.85) scaleX(1.1); }
+  }
+
+  /* Bubbles */
+  .bubble {
+    position: fixed;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 255, 200, 0.3);
+    background: radial-gradient(circle at 30% 30%, rgba(0,255,200,0.15), transparent);
+    pointer-events: none;
+    z-index: -1;
+    animation: riseUp linear infinite;
+  }
+
+  @keyframes riseUp {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    5%   { opacity: 0.8; }
+    95%  { opacity: 0.3; }
+    100% { transform: translateY(-100vh) translateX(var(--sway)); opacity: 0; }
+  }
+
+  /* Rays of light from top */
+  .light-ray {
+    position: fixed;
+    top: -200px;
+    width: 2px;
+    height: 60vh;
+    background: linear-gradient(180deg, rgba(0,200,255,0.12) 0%, transparent 100%);
+    transform-origin: top center;
+    z-index: -1;
+    animation: swayRay ease-in-out infinite;
+  }
+
+  @keyframes swayRay {
+    0%, 100% { transform: rotate(var(--r1)); opacity: 0.4; }
+    50%       { transform: rotate(var(--r2)); opacity: 0.9; }
+  }
+
+  /* ===== SCORE BAR ===== */
+  #score-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 10, 30, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 255, 200, 0.2);
+    box-shadow: 0 0 30px rgba(0, 200, 255, 0.1), inset 0 -1px 0 rgba(0,255,200,0.15);
+  }
+
+  .score-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: rgba(0,255,200,0.6);
+    text-transform: uppercase;
+  }
+
+  .score-value {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--glow);
+    text-shadow: 0 0 20px var(--glow), 0 0 40px var(--glow2);
+    letter-spacing: 2px;
+  }
+
+  .score-total { color: rgba(0,255,200,0.4); font-size: 1rem; }
+
+  /* Progress bar */
+  #progress-wrap {
+    position: fixed;
+    top: 56px; left: 0; right: 0;
+    height: 3px;
+    background: rgba(0,255,200,0.1);
+    z-index: 999;
+  }
+
+  #progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--glow2), var(--glow));
+    box-shadow: 0 0 10px var(--glow);
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* ===== HERO HEADER ===== */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    letter-spacing: 6px;
+    color: rgba(0,255,200,0.5);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    animation: fadeSlideIn 1s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, var(--glow) 50%, var(--glow2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 40px rgba(0,255,200,0.3));
+    animation: fadeSlideIn 1s 0.2s ease both;
+    margin-bottom: 12px;
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(0,255,200,0.5);
+    letter-spacing: 2px;
+    margin-bottom: 48px;
+    animation: fadeSlideIn 1s 0.4s ease both;
+  }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    animation: bobbing 2s ease-in-out infinite, fadeSlideIn 1s 0.8s ease both;
+    color: rgba(0,255,200,0.6);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .scroll-arrow {
+    width: 36px; height: 36px;
+    border-right: 2px solid var(--glow);
+    border-bottom: 2px solid var(--glow);
+    transform: rotate(45deg);
+    box-shadow: 4px 4px 10px rgba(0,255,200,0.3);
+    animation: arrowPulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes bobbing {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(10px); }
+  }
+
+  @keyframes arrowPulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 1; box-shadow: 4px 4px 20px var(--glow); }
+  }
+
+  /* Orb decoration */
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .orb1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,200,255,0.06) 0%, transparent 70%);
+    filter: blur(40px);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: orbBreath 6s ease-in-out infinite;
+  }
+
+  .orb2 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(123,47,255,0.08) 0%, transparent 70%);
+    filter: blur(60px);
+    bottom: 10%; right: 10%;
+    animation: orbBreath 8s 2s ease-in-out infinite;
+  }
+
+  @keyframes orbBreath {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50%       { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  }
+
+  /* ===== QUIZ SECTION ===== */
+  .quiz-wrapper {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 80px 20px 100px;
+  }
+
+  /* Section divider */
+  .section-divider {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .divider-line {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .divider-line::before,
+  .divider-line::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,255,200,0.4), transparent);
+    max-width: 200px;
+  }
+
+  .divider-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--glow);
+    box-shadow: 0 0 10px var(--glow), 0 0 20px var(--glow2);
+  }
+
+  /* ===== QUESTION CARD ===== */
+  .q-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0,255,200,0.12);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 32px;
+    position: relative;
+    backdrop-filter: blur(16px);
+    box-shadow:
+      0 0 0 1px rgba(0,255,200,0.05),
+      0 20px 60px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+  }
+
+  .q-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--glow), var(--glow2), transparent);
+    opacity: 0.5;
+  }
+
+  .q-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px rgba(0,255,200,0.12),
+      0 30px 70px rgba(0,0,0,0.6),
+      0 0 40px rgba(0,200,255,0.05),
+      inset 0 1px 0 rgba(255,255,255,0.07);
+  }
+
+  /* Corner accent */
+  .q-card::after {
+    content: '';
+    position: absolute;
+    top: 20px; right: 20px;
+    width: 40px; height: 40px;
+    border-top: 1px solid rgba(0,255,200,0.2);
+    border-right: 1px solid rgba(0,255,200,0.2);
+    border-radius: 0 8px 0 0;
+  }
+
+  /* Question number badge */
+  .q-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(0,255,200,0.1);
+    border: 1px solid rgba(0,255,200,0.3);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--glow);
+    margin-bottom: 16px;
+    box-shadow: 0 0 12px rgba(0,255,200,0.15);
+  }
+
+  .q-text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    font-weight: 400;
+    color: #c8eeff;
+    margin-bottom: 24px;
+  }
+
+  /* ===== OPTIONS ===== */
+  .options-grid { display: flex; flex-direction: column; gap: 10px; }
+
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .opt::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,255,200,0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .opt:hover::before { opacity: 1; }
+
+  .opt:hover {
+    border-color: rgba(0,255,200,0.3);
+    background: rgba(0,255,200,0.06);
+    transform: translateX(4px);
+    box-shadow: -4px 0 20px rgba(0,255,200,0.1);
+  }
+
+  .opt-letter {
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: rgba(0,255,200,0.08);
+    border: 1px solid rgba(0,255,200,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(0,255,200,0.7);
+    transition: all 0.25s;
+  }
+
+  .opt:hover .opt-letter {
+    background: rgba(0,255,200,0.15);
+    color: var(--glow);
+  }
+
+  .opt-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(210,240,255,0.85);
+  }
+
+  /* CORRECT */
+  .opt.correct {
+    border-color: var(--correct) !important;
+    background: rgba(0,229,160,0.12) !important;
+    transform: none !important;
+    box-shadow: 0 0 0 1px var(--correct), 0 0 30px rgba(0,229,160,0.2), inset 0 0 20px rgba(0,229,160,0.05);
+  }
+
+  .opt.correct .opt-letter {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: #000;
+  }
+
+  .opt.correct .opt-text { color: #fff; font-weight: 600; }
+
+  /* WRONG */
+  .opt.wrong {
+    border-color: var(--wrong) !important;
+    background: rgba(255,68,102,0.12) !important;
+    transform: none !important;
+    box-shadow: 0 0 0 1px var(--wrong), 0 0 30px rgba(255,68,102,0.15);
+  }
+
+  .opt.wrong .opt-letter {
+    background: var(--wrong);
+    border-color: var(--wrong);
+    color: #fff;
+  }
+
+  .opt.wrong .opt-text { color: rgba(255,200,200,0.9); }
+
+  /* Disabled */
+  .opt.disabled { cursor: default; pointer-events: none; }
+  .opt.disabled:not(.correct):not(.wrong) { opacity: 0.45; }
+
+  /* ===== FEEDBACK EMOJI ===== */
+  .emoji-pop {
+    display: none;
+    font-size: 2.8rem;
+    margin-top: 18px;
+    text-align: center;
+    animation: emojiIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.5) both;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  }
+
+  @keyframes emojiIn {
+    from { transform: scale(0) rotate(-20deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  /* ===== RIPPLE ON CLICK ===== */
+  @keyframes ripple {
+    0%   { transform: scale(0); opacity: 0.6; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+
+  .ripple-el {
+    position: absolute;
+    border-radius: 50%;
+    width: 60px; height: 60px;
+    background: rgba(0,255,200,0.3);
+    pointer-events: none;
+    animation: ripple 0.6s ease-out forwards;
+    transform-origin: center;
+    margin-left: -30px;
+    margin-top: -30px;
+  }
+
+  /* ===== FINAL SCORE CARD ===== */
+  #final-card {
+    display: none;
+    text-align: center;
+    padding: 60px 40px;
+    background: var(--card-bg);
+    border: 1px solid rgba(0,255,200,0.2);
+    border-radius: 28px;
+    margin: 40px 0 80px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 80px rgba(0,200,255,0.1);
+    animation: fadeSlideIn 0.8s ease both;
+  }
+
+  #final-card h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: var(--glow);
+    text-shadow: 0 0 30px var(--glow);
+    margin-bottom: 12px;
+  }
+
+  #final-score-big {
+    font-family: 'Cinzel', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--glow), var(--glow2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(0,255,200,0.4));
+    line-height: 1;
+    margin: 20px 0;
+  }
+
+  #final-msg {
+    font-size: 1.1rem;
+    color: rgba(0,255,200,0.6);
+    letter-spacing: 1px;
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,255,200,0.3); border-radius: 4px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .q-card { padding: 22px 16px; border-radius: 18px; }
+    .q-text { font-size: 0.95rem; }
+    .opt { padding: 12px 14px; }
+    .hero-title { font-size: 2rem; }
+  }
+</style>
 </head>
 <body>
-    <canvas id="chem-bg"></canvas>
-    <div id="emoji-container"></div>
-    <div id="modal-overlay" class="hidden">
-        <div class="modal-content glass">
-            <h3>لديك تقدم محفوظ 📁</h3>
-            <p>هل تريد استكمال الاختبار من حيث توقفت أم البدء من جديد؟</p>
-            <div class="modal-btns">
-                <button class="action-btn btn-primary" onclick="loadSavedProgress()">استكمال التقدم</button>
-                <button class="action-btn btn-danger" onclick="restartApp()">إعادة من البداية</button>
-            </div>
-        </div>
-    </div>
-    <div id="app">
-        <div id="home-view" class="glass">
-            <h1>أسئلة MCQ<br>لامتحان الكيمياء العملي النهائي</h1>
-            <p class="subtitle">by: al_witify</p>
-            <div class="grid" id="lecture-grid"></div>
-        </div>
-        <div id="quiz-view" class="hidden">
-            <div class="sticky-header glass">
-                <button class="back-btn" onclick="goHome()" title="الرئيسية">🏠</button>
-                <span id="quiz-title" class="quiz-title"></span>
-                <div class="score-box">النتيجة: <span id="score-val">0</span> / <span id="total-val">0</span></div>
-            </div>
-            <div id="questions-container"></div>
-        </div>
-    </div>
-    <script>
-        const rawData = {
-            "Blood Glucose": [
-                {q:"In diabetes mellitus, glucagon levels are:", o:["elevated due to high insulin","lowered due to high conversion to glucose","lowered due to low insulin","elevated and not suppressed by carbohydrate loading"], a:3, ai:false},
-                {q:"In the diabetic patient, residual insulin secretion can be monitored by:", o:["glucose tolerance test","C-peptide levels","pancreatic polypeptide levels","insulin levels"], a:1, ai:false},
-                {q:"The determination of glucose tolerance following the oral administration of glucose is recommended as a screening test for the presence of underlying gestational diabetes mellitus. How much gram of glucose is recommended in this tolerance test?", o:["50 grams","100 grams","75 grams","120 grams"], a:1, ai:false},
-                {q:"According to the WHO criteria, patients with type I diabetes mellitus are, at the time of diagnosis, characterized by all the following except:", o:["hyperglycemia","ketoacidosis","ketonuria","normal weight"], a:3, ai:false},
-                {q:"Which of the following statements about type 1 diabetes mellitus are correct:", o:["Formerly known as insulin independent","Adult onset","Caused by autoimmune destruction of the B-cells of the pancreas","The pancreas synthesizes insulin but unable to secrete"], a:2, ai:false},
-                {q:"Which of the following confirmed values meet the diagnostic threshold for diabetes?", o:["fasting blood glucose 140 mg/dl","random glucose >160 mg/dl","2 hour post prandial glucose to 126 mg/dl","fasting blood glucose ≥126 mg/dl"], a:3, ai:false},
-                {q:"Insulin deficiency is associated with:", o:["Reduced lipolysis","Increased ketogenesis","Reduced gluconeogenesis","Reduced proteolysis"], a:1, ai:false},
-                {q:"The pathogenesis of hyperglycemia in type 2 diabetes includes all the following mechanisms except for:", o:["Increased glucose production by the liver","Impaired insulin secretion","Decreased glucose uptake from the skeletal muscle","All of the options given are correct"], a:3, ai:false},
-                {q:"Which of the following is correct of type II diabetes mellitus?", o:["Is not associated with obesity.","is mostly diagnosed in juveniles, age 9-to-14.","is mostly diagnosed in those over the age of 40y.","Has an absolute requirement for insulin replacement to preserve life."], a:2, ai:false},
-                {q:"Insulin enhances the uptake of triacylglycerols in adipose tissues. Which of the following enzyme is activated that facilitates the uptake?", o:["Hormone-sensitive lipase","Lipoprotein lipase","LCAT","cholesterol oxidase"], a:1, ai:false},
-                {q:"Hyperglycemia does not produce in:", o:["Decreased insulin secretion.","Increased carbohydrate intake.","Decreased peripheral glucose uptake.","Increased ketogenesis."], a:3, ai:false},
-                {q:"Plasma insulin concentration as almost zero, When glucose concentrations is:", o:["10 mg/dL","40 mg/dL","60 mg/dL","80 mg/dL"], a:1, ai:false},
-                {q:"The enzyme catalyzes the oxidation of glucose into gluconic acid and H2O2:", o:["glucose oxidase","glucose hexokinase","glucose dehydrogenase","mutarotase"], a:0, ai:false},
-                {q:"The healthy persons maintains the extracellular glucose concentration remarkably constant within the limits of:", o:["90-160 mg/dl","70-100 mg/dl","50-70 mg/dl","70-180 mg/dl"], a:1, ai:false},
-                {q:"Which of the following statements regarding glucose blood samples is/are correct? 1. After a period of fasting, the glucose concentration in venous blood is 5-10% lower than arterial blood. 2. deproteinization will result to glucose decrease. 3. the glucose content of erythrocytes is lower than that in plasma 4. glucose values in venous plasma are 10% lower than those in venous whole blood.", o:["only 1 and 3 are correct","only 1, 2, and 3 are correct","only 2 and 4 are correct","1, 2, 3 and 4 are correct"], a:0, ai:false},
-                {q:"The screening test for gestational diabetes mellitus recommended between 24th to 28th week of gestation requires 50g-75g of glucose dissolved in 200ml of water and slowly drunk. A blood sample is collected after:", o:["30 mins","60 mins","90 mins","120 mins"], a:1, ai:false},
-                {q:"High-risk pregnant patients should undergo immediate testing when they are defined as having which of the following? 1. marked obesity 2. Glycosuria 3. personal history of GDM 4. Strong family history of diabetes.", o:["only 1 and 3 are correct","only 1, 2, and 3 are correct","only 2 and 4 are correct","1, 2, 3 and 4 are correct"], a:3, ai:false},                {q:"Which of the following are not the criteria for the diagnosis of diabetes?", o:["Fasting blood glucose >126 mg/dL","2-hour postprandial glucose >140 mg/dL","HbA1C >6.5%","Random blood glucose >200 mg/dL with classical symptoms"], a:1, ai:false},
-                {q:"A 55 year old patients diagnosed as prediabetic. Which of the following statement accurately characterize prediabetes?", o:["Fasting blood glucose from 120-180 mg/dL","Fasting blood glucose from 126-140 mg/dL","Fasting blood glucose from 100-125 mg/dL","All of the above"], a:2, ai:false},
-                {q:"In the colorimetric estimation of blood glucose using the glucose oxidase reaction, what is the required volume of the serum or plasma sample?", o:["1 ml","100 microliter","10 microliter","50 microliter"], a:2, ai:true},
-                {q:"At which wavelength should the absorbance of the test and standard be recorded against the blank during the colorimetric estimation of blood glucose?", o:["340 nm","450 nm","510 nm","620 nm"], a:2, ai:true},
-                {q:"Before performing a blood glucose test, the patient should inform the doctor about their medications. Which of the following medications is known to affect blood glucose levels?", o:["Paracetamol","Penicillin","Vitamin C","Phenytoin"], a:3, ai:true},
-                {q:"A patient presents with anxiety, sweating, trembling, and confusion. According to the clinical signs, these symptoms are most characteristic of:", o:["Hyperglycemia","Hypoglycemia","Gestational diabetes","Renal glucosuria"], a:1, ai:true},
-                {q:"Hypoglycemia can occur in different age groups due to various reasons. Which of the following is considered a specific cause of infantile hypoglycemia?", o:["Insulinoma","Deficiency of aldolase B (fructose-induced hypoglycemia)","Chronic alcoholism","Overdose of oral hypoglycemic drugs"], a:1, ai:true},
-                {q:"In a patient with renal glucosuria, glucose appears in the urine even though the plasma glucose level is still below the normal renal threshold. What is this normal renal threshold for glucose?", o:["< 140 mg/dl","< 180 mg/dl","< 200 mg/dl","< 126 mg/dl"], a:1, ai:true},
-                {q:"Hyperglycemia can be caused by various endocrine and stress-related factors other than Diabetes Mellitus. Which of the following conditions is a recognized cause of hyperglycemia?", o:["High cortisol (e.g., Cushing syndrome)","Hypofunction of the suprarenal cortex","Deficient fatty acid oxidation (Carnitine deficiency)","Glycogen storage diseases in the liver"], a:0, ai:true}
-            ],
-            "HbA1C": [
-                {q:"In diabetic patient, this provides information about the average blood glucose concentration during the preceding 6-8 week:", o:["HbB","HbF","HbA1c","HbS"], a:2, ai:false},
-                {q:"HbA1C represents:", o:["Oral glucose tolerance test","Fructosamine test","plasma glucose concentration over pervious 8-10 Weeks","Fasting plasma glucose concentration"], a:2, ai:false},
-                {q:"Hemoglobin A1c represents:", o:["100% of HbA1","50% of HbA1","the major serum hemoglobin","the most common aberrant hemoglobin"], a:1, ai:false},
-                {q:"In diabetic patient, the need to reevaluate treatment regimen is necessary when the glycated hemoglobin is greater than:", o:["2%","4%","6%","8%"], a:3, ai:false},
-                {q:"Which of the following statements regarding glycohemoglobins are correct? 1. The degree of glycation depends essentially on the degree as well as the duration of the blood glucose elevation. 2. The nonglycated hemoglobin is Ao 3. The reference method for glycated hemoglobin analysis is liquid chromatographic 4. The mean blood glucose of the preceding 6-8 weeks is correlated with corresponding glycohemoglobin value.", o:["only 1 and 3 are correct","only 1, 2, and 3 are correct","only 2 and 4 are correct","1, 2, 3 and 4 are correct"], a:3, ai:false},
-                {q:"What principle is used in the latex-enhanced immunoassay method for measuring HbA1c?", o:["Binding of HbA1c to latex beads coated with specific antibodies","Separation based on charge differences","Reaction with cis-diol groups of glucose","Light scattering due to hemoglobin variants"], a:0, ai:false},
-                {q:"Which of the following HbA1c levels is typically considered 'not controlled' in diabetic patients?", o:["Less than 6.4%","6.5-8.4%","Greater than 8.5%","Exactly 6.5%"], a:2, ai:false},
-                {q:"Which of the following is NOT an advantage of using HbA1c to monitor long-term blood glucose control in diabetic patients?", o:["Reflects blood glucose levels over the past 2-3 months","Unaffected by recent food intake","Requires fasting before the test","Provides an average blood glucose level over time"], a:2, ai:false},
-                {q:"Which anticoagulant is preferred for HbA1c testing?", o:["Heparin","Citrate","EDTA","Sodium fluoride"], a:2, ai:false},
-                {q:"Which of the following is a method used to measure HbA1c levels?", o:["Cation-exchange chromatography","Ionization assay","Fluorescent microscopy","ELISA"], a:0, ai:false},
-                {q:"In patients with which of the following conditions might HbA1c results be inaccurately low?", o:["Iron deficiency anemia","Sickle cell disease","Hyperlipidemia","Hypertension"], a:1, ai:false},
-                {q:"Which of the following laboratory measurement best indicate the blood glucose control over a period of weeks to months?", o:["Measurement of blood glucose","Measurement of HbA1C","Measurement of urinary ketone bodies","Measurement of insulin"], a:1, ai:false},
-                {q:"During the non-enzymatic glycation process, glucose enters the red blood cell and reacts with which of the following to initially form a Schiff base?", o:["C-terminal lysine of the α-chain","N-terminal valine of the β-chain","N-terminal leucine of the α-chain","C-terminal valine of the β-chain"], a:1, ai:true},
-                {q:"According to the ADA guidelines, which of the following HbA1c ranges is indicative of prediabetes?", o:["< 5.7%","5.7 - 6.4%","6.5 - 7.0%","> 8.5%"], a:1, ai:true},
-                {q:"While conditions like hemolytic anemia can cause a falsely low HbA1c result, which of the following conditions is known to cause a falsely HIGH HbA1c reading?", o:["Splenectomy","Recent blood loss","Pregnancy","Chronic liver disease"], a:0, ai:true},
-                {q:"In affinity chromatography used for separating HbA1c, the immobilized m-aminophenyl boronic acid reacts with which specific functional groups of glucose?", o:["Amino groups","Carboxyl groups","Cis-diol groups","Ketoamine groups"], a:2, ai:true},
-                {q:"For an elderly diabetic patient with end-stage renal disease (ESRD) on hemodialysis who experiences frequent severe hypoglycemic episodes, what is the most appropriate target HbA1c to minimize the risk of hypoglycemia?", o:["< 6.0 - 6.5%","< 6.5 - 7.0%","< 7.0 - 7.5%","< 8.0 - 8.5%"], a:3, ai:true}
-            ],
-            "Hb test": [
-                {q:"The major adult hemoglobin, HbA, has the structure?", o:["Alpha 2 beta 2","Alpha 2 gamma 2","Alpha 2 delta 2","None of above"], a:0, ai:false},
-                {q:"In sickle cell anemia disorder, the hemoglobin produced is:", o:["HbA","HbC","HbF","HbS"], a:3, ai:false},
-                {q:"The anemia condition most commonly result from?", o:["Vitamin B-12 deficiency anemia","Sickle cell anemia","Iron-deficiency anemia","Leukemia"], a:2, ai:false},
-                {q:"In suspect Fe deficiency anemia, which lab investigations would you order?", o:["CBC (complete blood count)","Blood smear","Serum iron","Serum ferritin"], a:3, ai:false},
-                {q:"What are heme containing compounds (hemoproteins)?", o:["Hemoglobin, myoglobin, respiratory cytochromes, cytochrome p450, catalase, peroxidase, and tryptophan oxygenase.","Albumin, Globulin, and Fibrinogen.","Cholesterol, Triglycerides, and Bile acids.","Glucose, Fructose, and Galactose."], a:0, ai:false},
-                {q:"What are iron containing proteins?", o:["Trypsin, Pepsin, and Amylase.","Insulin, Glucagon, and Epinephrine.","Hemoglobin, myoglobin, respiratory cytochromes and cytochrome p450.","Lipase, LCAT, and Creatine Kinase."], a:2, ai:false},
-                {q:"What are the functions of hemoglobin and myoglobin?", o:["Both synthesize proteins in the liver.","Hemoglobin carries oxygen from lungs to tissues and myoglobin stores oxygen in muscles.","Both break down glucose for energy.","Both act as hormones regulating calcium levels."], a:1, ai:false},
-                {q:"What are the structural features of hemoglobin A molecule?", o:["It has one subunit and contains one iron atom.","It has two subunits and contains no iron atoms.","It has six subunits and contains two iron atoms.","Hb A has four subunits, two α and two β units. It contains 4 iron atoms."], a:3, ai:false},
-                {q:"How many molecules of oxygen can bind with hemoglobin?", o:["One","Two","Three","Four"], a:3, ai:false},
-                {q:"What are the structural features of myoglobin molecule?", o:["It has one subunit, and contains one iron atom.","It has four subunits and four iron atoms.","It has two subunits and two iron atoms.","It is a completely lipid-based structure with no iron."], a:0, ai:false},
-                {q:"How many molecules of oxygen can bind with myoglobin?", o:["One","Two","Three","Four"], a:0, ai:false},
-                {q:"100 ml of blood can carry how much oxygen?", o:["5 ml","20 ml","50 ml","100 ml"], a:1, ai:false},
-                {q:"What is Bohr effect?", o:["It is the decrease of iron absorption in the intestine.","It is the influence of pH and pCO2 to facilitate oxygenation of Hb in the lungs and deoxynation at the tissues.","It is the synthesis of hemoglobin in the bone marrow.","It is the breakdown of red blood cells in the spleen."], a:1, ai:false},
-                {q:"What is cooperative binding of O2?", o:["Binding of one oxygen molecule at one heme, increases the oxygen affinity of the remaining heme groups in the same hemoglobin molecule.","It decreases the overall oxygen affinity of hemoglobin.","It completely prevents the binding of carbon dioxide.","It is the process by which myoglobin transfers oxygen to hemoglobin."], a:0, ai:false},
-                {q:"Which will decrease the affinity of hemoglobin for oxygen?", o:["Lower temperatures","Decreased pCO2","Increased pH","Increased 2,3 Bisphosphoglycerate (2,3-BPG) level"], a:3, ai:false},
-                {q:"According to the reference values, what is the normal hemoglobin concentration range for adult females?", o:["16-23 g/dL","12.5-16.5 g/dL","10-14 g/dL","13.5-17.5 g/dL"], a:1, ai:true},
-                {q:"What is the expected normal hemoglobin level at birth?", o:["10-14 g/dL","12-16 g/dL","13-17 g/dL","16-23 g/dL"], a:3, ai:true},
-                {q:"Which of the following conditions is a recognized cause of secondary polycythemia (an above-normal hemoglobin level)?", o:["Excessive bleeding","Malignant variation in blood cell production in the bone marrow","Living at high altitudes","Iron deficiency"], a:2, ai:true},
-                {q:"A below-normal hemoglobin level indicating anemia can be the result of all the following EXCEPT:", o:["Excessive destruction of red blood cells","Heavy smoking","Kidney disease","Bone marrow failure"], a:1, ai:true},
-                {q:"In a clinical assessment, what is the generally expected relationship between a healthy individual's hemoglobin level and their hematocrit level?", o:["The hemoglobin level should be equal to the hematocrit level","The hemoglobin level should be 1/2 of the hematocrit level","The hemoglobin level should be 1/3 of the hematocrit level","The hemoglobin level should be 2/3 of the hematocrit level"], a:2, ai:true},                {q:"Sickle cell hemoglobin (HbS) is a hemoglobinopathy characterized by which specific amino acid substitution?", o:["Glutamic acid for Valine at the 6th position in the alpha chain","Valine for Glutamic acid at the 6th position in the beta chain","Lysine for Glutamic acid at the 6th position in the beta chain","Valine for Glutamic acid at the 6th position in the alpha chain"], a:1, ai:true},
-                {q:"Under what specific condition does HbS precipitate into crystals, causing the red blood cells to change shape and become sickle-shaped?", o:["In high oxygen tension","When exposed to alkaline pH","In low oxygen tension (when HbS is reduced)","During high carbon dioxide tension"], a:2, ai:true},
-                {q:"The pathological condition known as beta-thalassemia major is characterized by:", o:["A single amino acid substitution of Valine for Glutamic acid","Defective synthesis of the alpha-globin chain","Increased levels of fetal hemoglobin (HbF) due to defective beta-globin chain synthesis","Abnormal synthesis of the heme porphyrin ring"], a:2, ai:true}
-            ],
-            "Total Protein": [
-                {q:"Serum differs from blood as it lacks:", o:["antibodies","clotting factors","albumins","globulins"], a:1, ai:false},
-                {q:"The high albumin level and decreased globuline is important clinically in detecting:", o:["Liver disease","Cardiac disease","Nervous disease","Lung disease"], a:0, ai:false},
-                {q:"All the following about plasma albumin is true except:", o:["It makes the greatest contribution to the plasma osmotic pressure.","It is minimally filtered at the renal glomeruli.","It behaves as an anion at the blood pH.","It is involved in the production of immunity."], a:3, ai:false},
-                {q:"All the following are functions of the plasma proteins except:", o:["Control of the plasma volume.","Control of erythropoiesis.","Transport of hormones.","Carriage of carbon dioxide."], a:1, ai:false},
-                {q:"The normal reference range for total Plasma proteins are:", o:["2.5-4.5 gm/dl","6-8 gm/dl","6.0-7.3 gm/dl",">8.3 gm/dl"], a:1, ai:false},
-                {q:"Hyperproteinemia can be caused by:", o:["malnutrition","liver disease","dehydration","severe burns"], a:2, ai:false},
-                {q:"Proteins are polymeric compounds joined together by:", o:["peptide bonds","ionic bonds","covalent bonds","hydrogen bonds"], a:0, ai:false},
-                {q:"The major types of plasma proteins are:", o:["globulins and fibrinogen","albumin and hemoglobin","albumin, globulins and fibrinogen","none of the above"], a:2, ai:false},
-                {q:"Albumin plays a key role in maintaining which of the following?", o:["Blood glucose levels","Oncotic pressure","Body temperature","Blood urea levels"], a:1, ai:false},
-                {q:"The albumin-BCG complex absorbs light maximally at what wavelength?", o:["420 nm","520 nm","628 nm","600 nm"], a:2, ai:false},
-                {q:"Most plasma proteins are synthesized in the liver. Which of the following proteins is an exception and is synthesized in plasma cells?", o:["Albumin","Fibrinogen","γ-globulins","Prealbumin"], a:2, ai:true},
-                {q:"Almost all plasma proteins are chemically classified as glycoproteins, with the exception of:", o:["Transferrin","Immunoglobulins","α₁-Antitrypsin","Albumin"], a:3, ai:true},
-                {q:"In the Biuret method for total protein determination, which of the following ions reacts with peptide bonds in an alkaline solution to form a colored complex?", o:["Fe²⁺","Cu²⁺","Zn²⁺","Mg²⁺"], a:1, ai:true},
-                {q:"The Biuret reaction produces a specific colored complex that is measured spectrophotometrically. What is the color of this complex and its optimal measuring wavelength?", o:["Violet color measured at 540 nm","Blue color measured at 628 nm","Red color measured at 415 nm","Yellow color measured at 450 nm"], a:0, ai:true},
-                {q:"Physiological variability can influence the concentration of plasma proteins. Which of the following factors is known to cause a physiological INCREASE in total protein concentration?", o:["Starvation","Stand-up position","Pregnancy","Childhood"], a:1, ai:true},
-                {q:"Which of the following conditions is considered a clinical cause of hypoproteinemia (decreased total protein levels)?", o:["Multiple myeloma","Severe burns","Hyperthyroidism","Dehydration"], a:1, ai:true}
-            ],
-            "Urea": [
-                {q:"Non-protein nitrogenous substances in blood are raised in:", o:["Starvation","Liver damage","Renal failure","All of these"], a:2, ai:false},
-                {q:"Urea is synthesized from:", o:["the catabolism of amino acids","the catabolism of free fatty acids","the catabolism of carbohydrates","the catabolism of ketone bodies"], a:0, ai:false},
-                {q:"Blood urea level is not specific indicator for renal dysfunction, because:", o:["Its level is affected by dietary protein","liver disease may raise its level","blood pressure may elevate its level","All of the above"], a:0, ai:false},
-                {q:"Low Serum urea in late pregnancy is due to:", o:["blockage of the urinary tract","severe liver damage","water retention","very low protein diet"], a:2, ai:false},
-                {q:"What is the normal reference range for Blood Urea Nitrogen (BUN)?", o:["15 to 40 mg/dL","7 to 20 mg/dL","6 to 8 g/dL","12 to 20 mg/dL"], a:1, ai:true},
-                {q:"In the clinical laboratory, serum urea concentration can be calculated from the Blood Urea Nitrogen (BUN) value. Which of the following formulas is correct?", o:["Urea = BUN × 2.14","Urea = BUN ÷ 2.14","Urea = BUN × 1.14","Urea = BUN ÷ 1.14"], a:0, ai:true},
-                {q:"How does the human kidney primarily handle urea?", o:["Freely filtered by glomeruli with active tubular reabsorption","Freely filtered by glomeruli with tubular secretion","Freely filtered by glomeruli with passive diffusion depending on urine flow rate","Not filtered by glomeruli, only secreted by the tubules"], a:2, ai:true},
-                {q:"In the enzymatic method for urea estimation, the enzyme urease acts on urea and water to produce:", o:["Amino acids and Carbon dioxide","Ammonia and Carbon dioxide","Ammonium and Oxygen","Nitrogen and Carbon monoxide"], a:1, ai:true},
-                {q:"A patient presents with severe dehydration due to excessive vomiting and diarrhea. Which of the following laboratory findings would most likely be expected?", o:["Low BUN with normal serum creatinine","Elevated BUN with elevated serum creatinine and a decreased BUN:Creatinine ratio","Elevated BUN with normal serum creatinine and an increased BUN:Creatinine ratio","Normal BUN with elevated serum creatinine"], a:2, ai:true},
-                {q:"Which of the following conditions is considered a post-renal cause of elevated serum urea (azotemia)?", o:["Acute Glomerulonephritis","Dehydration","Congestive heart failure","Benign enlargement of the prostate"], a:3, ai:true},
-                {q:"Which of the following factors can cause a physiological decrease in Blood Urea Nitrogen (BUN) levels?", o:["High protein diet","Older age with the inability to concentrate urine","A combination of a low-protein and high-carbohydrate diet","Severe gastrointestinal hemorrhage"], a:2, ai:true},
-                {q:"In the measurement of urea using the Berthelot reaction, ammonia reacts with phenol and hypochlorite to produce a specific colored compound. What is the color of this compound and at which wavelength is it optimally measured?", o:["Brown compound measured at 450 nm","Blue compound (Indophenol) measured at 540 nm","Red compound measured at 510 nm","Violet compound measured at 540 nm"], a:1, ai:true},
-                {q:"A 55-year-old diabetic patient has a BUN of 75 mg/dL and a serum creatinine of 6.0 mg/dL. The BUN/Creatinine ratio is approximately 12:1. These findings are most indicative of:", o:["Pre-renal failure","Renal cause (e.g., acute kidney injury)","Post-renal obstruction","Advanced liver cirrhosis"], a:1, ai:true}
-            ],
-            "Creatinine": [
-                {q:"Creatinine clearance is decreased in:", o:["Glomerulonephritis","Urinary obstruction","Hypertension","Starvation"], a:0, ai:false},
-                {q:"A patient's blood urea is 30 mg/dl and his creatinine is 5.0 mg/dl. What conclusion would you draw from these results, Patient?", o:["is normal","is in early stage of renal failure","has suffered muscle deterioration","One of the values is in error"], a:3, ai:false},
-                {q:"Which of the following groups of amino acids is required for the biosynthesis of creatine?", o:["Arginine, Leucine, Valine","Alanine, Glycine, Serine","Arginine, Glycine, Methionine","Methionine, Cysteine, Tyrosine"], a:2, ai:true},
-                {q:"The biosynthesis of creatine occurs primarily in two steps involving which of the following organs?", o:["Liver and Pancreas","Kidneys and Liver","Skeletal muscle and Heart","Brain and Kidneys"], a:1, ai:true},
-                {q:"Approximately what percentage of muscle creatine is spontaneously converted to creatinine on a daily basis?", o:["1-2%","5-10%","15-20%","98%"], a:0, ai:true},
-                {q:"Creatinine is produced and excreted at a constant rate that is directly proportional to the body's:", o:["Dietary protein intake","Body fat percentage","Muscle mass","Daily water consumption"], a:2, ai:true},
-                {q:"In the Jaffe reaction for measuring creatinine, what is the working reagent used to form an orange-red complex?", o:["Acetic acid in alkaline solution","Picric acid in alkaline solution","Sulfuric acid in acidic solution","Ninhydrin in neutral solution"], a:1, ai:true},
-                {q:"Which of the following is considered a non-renal factor that can cause an increase in serum creatinine levels?", o:["Pregnancy","Severe malnutrition","Acromegaly","Advanced liver disease"], a:2, ai:true},
-                {q:"The formula for calculating the Glomerular Filtration Rate (GFR) typically takes into account the serum creatinine level along with other factors such as:", o:["Age, race, and sex","Height, weight, and blood pressure","Liver enzymes and fasting blood sugar","Urine output volume only"], a:0, ai:true},
-                {q:"In the clearance formula C = (U x V) / P, what does \"V\" represent?", o:["Velocity of blood flow","Volume of plasma cleared per minute","Volume of urine in ml excreted per minute","Venous pressure"], a:2, ai:true},
-                {q:"A 78-year-old bedridden female with advanced Rheumatoid Arthritis shows a serum creatinine level of 0.3 mg/dL. This decreased level is most likely attributed to:", o:["Impaired renal function","Severe muscle wasting","Obstruction of the urinary tract","High intake of red meat"], a:1, ai:true}
-            ],            "Bilirubin": [
-                {q:"In obstructive jaundice, urinary Bilirubin is:", o:["Absent","Increased","Present","Present in small amount"], a:1, ai:false},
-                {q:"A positive urine for bilirubin can be caused by the presence of:", o:["unconjugated bilirubin","conjugated bilirubin","delta bilirubin","urobilinogen"], a:1, ai:false},
-                {q:"A diagnosis of hemolytic anemia in adult would be confirmed by the following findings:", o:["urobilinogen excretion increased","Increased plasma ALP","Increased plasma ALT","Increased plasma haptoglobin"], a:0, ai:false},
-                {q:"Total serum bilirubin levels are:", o:["Markedly increased in chronic hemolytic disease (above 10 mg/dl)","Markedly elevated in hepatocellular disease (10-40 mg/dl)","Mildly increased in cholestasis (below 5 mg/dl)","B and C"], a:1, ai:false},
-                {q:"An 6 years old child presents with total bilirubin levels of 2.4 mg/dl, urinary Urobilinogen levels are increased and bilirubin is absent in urine. The most likely diagnosis is:", o:["Hepatitis","Hemolytic Jaundice","Obstructive jaundice","Dubin Johnson's syndrome"], a:1, ai:false},
-                {q:"A 25 year male presents with elevated bilirubin levels. Examination of urine shows presence of bilirubin while urobilinogen is absent. likely diagnosis is:", o:["Hepatitis","Hemolytic Jaundice","Obstructive jaundice","Gilbert's syndrome"], a:2, ai:false},
-                {q:"A 24-year-old man presents to the emergency department complaining of yellowing of his eyes and dark urine for 3 days. He denies abdominal pain, nausea, or vomiting. His medical history is unremarkable, but he mentions a recent episode of flu-like illness about a week ago. On physical examination, he appears jaundiced but otherwise healthy. No hepatosplenomegaly is noted. Laboratory results show: Total bilirubin: 4.8 mg/dl, Direct (conjugated) bilirubin: 0.5 mg/dL, AST, ALT, ALP: Normal. What is the most likely diagnosis?", o:["Hemolytic anemia","Gilbert's syndrome","Hepatitis A infection","Obstructive jaundice"], a:1, ai:false},
-                {q:"Which condition is most likely associated with raised levels of unconjugated bilirubin only and normal liver enzymes?", o:["Cholecystitis","Hepatitis","Gilbert's Syndrome","Cirrhosis"], a:2, ai:false},
-                {q:"In post-hepatic jaundice (e.g., cholecystitis), which of the following is typically observed?", o:["High unconjugated bilirubin","High conjugated bilirubin","Low total bilirubin","Decreased liver enzymes"], a:1, ai:false},
-                {q:"During bilirubin metabolism in the reticuloendothelial system, heme is first converted to biliverdin by which of the following enzymes?", o:["Biliverdin reductase","Heme oxygenase","UDP-glucuronyl transferase","Alanine aminotransferase"], a:1, ai:true},
-                {q:"Unconjugated bilirubin is converted to conjugated bilirubin in the liver by the action of:", o:["Heme oxygenase","UDP-glucuronyl transferase","Biliverdin reductase","Intestinal bacteria"], a:1, ai:true},
-                {q:"In the Colorimetric Diazo method for determining total bilirubin, what substance is added to the reaction with diazotized sulphanilic acid to ensure both conjugated and unconjugated forms react to produce the diazo dye?", o:["Acetic acid","Caffeine","Hydrogen peroxide","Alkaline picrate"], a:1, ai:true},
-                {q:"According to standard laboratory reference ranges, what is the normal expected level for Direct Bilirubin in the serum?", o:["0.2 - 1.2 mg/dL","0.2 - 0.8 mg/dL","0 - 0.3 mg/dL","1.0 - 2.5 mg/dL"], a:2, ai:true},
-                {q:"A severe complication of high unconjugated bilirubin in newborns is bilirubin encephalopathy. This occurs because unconjugated bilirubin:", o:["Obstructs the biliary tree","Causes severe hemolytic anemia","Crosses the blood-brain barrier and is highly toxic to neurons","Decreases the production of albumin"], a:2, ai:true},
-                {q:"Which of the following clinical signs is indicative of bilirubin encephalopathy in a neonate?", o:["Hyperactive reflexes and constant smiling","Rigid extension of all limbs and lethargy","Increased appetite and rapid weight gain","Pale, clay-colored stools"], a:1, ai:true},
-                {q:"For a term newborn, phototherapy under a fluorescent light is generally scheduled when the total serum bilirubin level reaches what concentration at 24 hours of age?", o:["2 to 4 mg/dL","5 to 7 mg/dL","10 to 12 mg/dL","Over 20 mg/dL"], a:2, ai:true},
-                {q:"In severe cases of hyperbilirubinemia, a blood exchange transfusion may be required. The primary goals of this procedure include all of the following EXCEPT:", o:["Decreasing serum bilirubin levels to prevent brain damage","Removing sensitized red blood cells","Correcting anemia and preventing cardiac failure","Enhancing the native function of the UDP-glucuronyl transferase enzyme"], a:3, ai:true}
-            ],
-            "Liver Enzymes": [
-                {q:"High ALP with low aminotransferase activity was observed in:", o:["cholestasis","hepatitis","hemolytic anemia","alcoholism"], a:0, ai:false},
-                {q:"Elevated levels of AST may indicate:", o:["congestion of the bile ducts","Cholestasis","Viral and chronic hepatitis","Alcoholic hepatitis"], a:3, ai:false},
-                {q:"SGPT is found in the (exclusively):", o:["peroxisome","lysosome","cytoplasm","mitochondria"], a:2, ai:false},
-                {q:"After severe liver damage, ALT levels rise more than ....... times greater than normal.", o:["50","30","10 to 20","20"], a:0, ai:false},
-                {q:"In the enzymatic reaction catalyzed by Alanine transaminase (ALT), the alpha-amino group is reversibly transferred between alanine and which of the following alpha-keto acids?", o:["Oxaloacetate","Alpha-ketoglutarate","Pyruvate","L-Glutamate"], a:1, ai:true},
-                {q:"Aspartate transaminase (AST) catalyzes the transfer of an alpha-amino group to form L-Glutamate and which of the following products?", o:["Pyruvate","Oxaloacetate","Alpha-ketoglutarate","Malate"], a:1, ai:true},
-                {q:"While ALT is predominantly found exclusively in the cytoplasm of hepatocytes, AST is found in the cytoplasm and which other cellular organelle?", o:["Lysosomes","Golgi apparatus","Mitochondria","Endoplasmic reticulum"], a:2, ai:true},
-                {q:"Which of the following statements correctly differentiates the tissue distribution of AST and ALT?", o:["ALT is found in the heart, muscle, and kidneys, while AST is exclusively in the liver.","AST is found in the liver, heart, muscle, kidney, and RBCs, while ALT is predominantly in the liver.","Both enzymes are equally distributed across all bodily tissues.","AST is strictly found in the liver, while ALT is widely distributed in muscles and RBCs."], a:1, ai:true},
-                {q:"In cases of acute hepatitis, which of the following enzyme patterns is typically observed?", o:["AST levels are significantly higher than ALT levels.","Very high levels of ALT (more than 10 times the normal level) with ALT > AST.","Mild elevation of both AST and ALT with prominent ALP increase.","Normal ALT with very high AST levels."], a:1, ai:true},
-                {q:"A moderate increase in ALT is most likely associated with which of the following conditions rather than an acute viral infection?", o:["Acute hepatitis","Liver cancer, cirrhosis, and obstruction of bile ducts","Severe burns","Acute heart failure"], a:1, ai:true},
-                {q:"Elevated levels of AST (where AST > ALT) are highly indicative of which of the following conditions?", o:["Viral hepatitis","Congestion of the bile ducts","Alcoholic hepatitis and acute heart failure","Cholestasis"], a:2, ai:true},
-                {q:"What is the normal physiological reference range for serum Alanine transaminase (ALT)?", o:["40 - 125 U/L","5 - 40 U/L","10 - 30 U/L","5 - 35 U/L"], a:3, ai:true},
-                {q:"Alkaline phosphatase (ALP) is particularly concentrated in specific tissues. Which of the following combinations represents tissues with the highest ALP concentrations?", o:["Brain, heart, and skeletal muscle","Liver, bone, bile duct, kidney, and placenta","Lungs, spleen, and pancreas","Stomach, intestines, and skin"], a:1, ai:true},
-                {q:"To determine the exact tissue source of an elevated total ALP in the blood, the detection of isoenzymes is utilized. Which isoenzyme is mainly produced in the liver?", o:["ALP-I","ALP-II","ALP-III","ALP-IV"], a:0, ai:true},
-                {q:"Serum Alkaline Phosphatase (ALP) can increase physiologically under normal, non-pathological conditions in which of the following groups?", o:["Elderly males","Pregnant women and children (during bone healing)","Individuals on a high-protein diet","Patients with chronic alcoholism"], a:1, ai:true},
-                {q:"In the routine laboratory assay for GPT (ALT) and GOT (AST), which chemical reagent is used to convert oxaloacetate and pyruvate into a derivative that can be measured spectrophotometrically?", o:["Picric acid","2,4-dinitrophenylhydrazine","Sulfanilic acid","Ninhydrin"], a:1, ai:true},
-                {q:"In the coupled enzymatic reaction for transaminase assays, the intensely colored 2,4-dinitrophenylhydrazine derivatives are measured at which wavelength using a spectrophotometer?", o:["490 nm","510 nm","546 nm","600 nm"], a:2, ai:true},
-                {q:"The enzyme gamma-glutamyltransferase (GGT) catalyzes the transfer of amino acids across membranes and is primarily involved in the metabolism of which important antioxidant?", o:["Ascorbic acid","Glutathione","Uric acid","Bilirubin"], a:1, ai:true},
-                {q:"A patient presents with elevated plasma ALP levels. To differentiate whether the source of the ALP elevation is due to liver disease or bone disease, which of the following tests is most highly sensitive and specific?", o:["AST","ALT","GGT","Total Bilirubin"], a:2, ai:true},
-                {q:"GGT is particularly useful in clinical diagnostics because its levels are consistently NOT increased in which of the following conditions despite an elevated ALP?", o:["Bone disease","Biliary obstruction","Chronic alcohol ingestion","Hepatocellular dysfunction"], a:0, ai:true},
-                {q:"Chronic alcohol ingestion can frequently be detected by an elevation of which liver enzyme, which rises in about 75% of patients who chronically drink?", o:["ALP","AST","ALT","GGT"], a:3, ai:true},
-                {q:"In severe liver diseases such as biliary obstruction (cholestasis), the elevation of which enzyme strongly parallels the elevation of ALP?", o:["ALT","AST","SGOT","GGT"], a:3, ai:true},
-                {q:"According to the laboratory procedures for measuring GPT (ALT), after incubating the serum with the substrate for exactly 30 minutes, what is added immediately before allowing the tubes to stand for 20 minutes at room temperature?", o:["0.4 M NaOH","Distilled water","2,4-dinitrophenylhydrazine","Alkaline picrate"], a:2, ai:true},
-                {q:"A 60-year-old woman presents with severe itching, dark urine, pale stools, and progressive jaundice. Her lab results show ALT = 95 U/L, AST = 88 U/L, ALP = 620 U/L, and GGT = 500 U/L. This enzymatic pattern is most consistent with:", o:["Acute viral hepatitis","Alcoholic liver disease","Hemolytic anemia","Obstructive liver injury (cholestasis)"], a:3, ai:true}
-            ],
-            "Mid exam 1st & 2nd course": [
-                {q:"A laboratory test for a 35-year-old male patient's were: fasting plasma glucose level is 130 mg/dL and the 2-hour oral glucose tolerance test is 190 mg/dL. What is the next step in the diagnosis for diabetes mellitus for this patient?", o:["The oral glucose tolerance test will be repeated.","The fasting plasma glucose test will be repeated.","No further testing is required; the diagnosis is excluded.","No further testing is required; the diagnosis is confirmed."], a:3, ai:false},
-                {q:"Patients with uncontrolled diabetes experience polyuria because:", o:["they drink excess amounts of water due to dehydration.","excess glucose in the blood is excreted by the kidneys.","low blood glucose levels result in cellular dehydration.","high blood sugar levels cause permanent kidney damage."], a:1, ai:false},
-                {q:"Which of the following complications is less likely to occur in type 2 diabetics, as opposed to type 1 diabetics?", o:["Retinopathy","Weight gain","Cardiovascular disease","Hypoglycemic coma"], a:3, ai:false},
-                {q:"A 15-year-old type 1 diabetic faints after injecting himself with insulin. He is administered glucagon and rapidly recovers. Glucagon induces activity of:", o:["Glycogen synthase","Glycogen phosphorylase","Glucokinase","Hexokinase"], a:1, ai:false},                {q:"A 30-year-old presents with intractable vomiting and inability to eat or drink for the past 3 days. His blood glucose level is normal. Which of the following is most important for maintenance of blood glucose?", o:["Liver","Heart","Skeletal muscle","Lysosome"], a:0, ai:false},
-                {q:"A 15-year-old male presents with increased thirst, hunger, urination, and weight loss. His fasting blood glucose level is 400 mg/dL and is diagnosed with type 1 diabetes mellitus. What is the reason for the patient's inability to maintain a normal blood glucose level?", o:["Decreased uptake of glucose by peripheral cells","Abnormal response to glucagon","Decreased glucagon to insulin ratio","Decreased glucose output by the liver"], a:0, ai:false},
-                {q:"When assessing a 56-year-old unconscious diabetic patient, the primary visible difference between hyperglycemia and hypoglycemia is the:", o:["patient's mental status.","rate of the patient's pulse.","presence of a medical identification tag.","rate and depth of breathing."], a:3, ai:false},
-                {q:"A 52-year-old woman with suspected diabetes mellitus has an oral glucose tolerance test, following the standard WHO protocol. The following results are obtained: Time (hours) 0: 100 mg/dL, Time (hours) 1: 151 mg/dL. How should these results be interpreted?", o:["Impaired fasting glucose and impaired glucose tolerance","Normal","Diabetes mellitus","Impaired glucose tolerance"], a:1, ai:false},
-                {q:"A definite diagnosis of diabetes mellitus is excluded by which of the following?", o:["HbA1c < 6.5%","Fasting glucose > 126 mg/dL","2-hour post 75 g oral glucose tolerance test is 138 mg/dL","Random glucose 216 mg/dL"], a:0, ai:false},
-                {q:"An oral glucose tolerance test after three days of increased carbohydrate intake is the only reliable means of diagnosis in suspected diabetes. Which of the following would be considered diagnostic in pregnancy?", o:["A fasting blood sugar of 110 mg/100 mL","A fasting blood sugar of 90 mg/100 mL and a three-hour value of 100 mg/100 mL","A fasting blood sugar of 95 mg/100 mL and a two-hour value of 165 mg/100 mL","A two-hour value of 109 mg/100 mL"], a:2, ai:false},
-                {q:"The elimination of _____ in the urine represents the major route for nitrogen excretion.", o:["urea","creatinine","uric acid","none of them"], a:0, ai:false},
-                {q:"Urea is formed in the liver from _____.", o:["ammonia and arginine","creatin","uric acid","lysine"], a:0, ai:false},
-                {q:"Azotemia occurs due to _____.", o:["Malnutrition","Over hydration","bleeding in the gastrointestinal tract","Severe liver damage"], a:2, ai:false},
-                {q:"Creatinine is overproduced in the blood due to _____.", o:["Rhabdomyolysis","Wilson's disease","decrease the breakdown of","high dose aspirin"], a:0, ai:false},
-                {q:"_____ is used in the enzymatic method for measuring serum creatinine.", o:["Lactate hydrogenase","xanthine oxidase","peroxidase","Pyruvate kinase"], a:2, ai:false},
-                {q:"High BUN values occur due to _____.", o:["over hydration","heart failure","Direct damage of the liver","none of the above"], a:1, ai:false},
-                {q:"One of the causes for urea plasma elevation is postrenal which refers to _____.", o:["acute tubular necrosis","renal hypoperfusion","obstruction of urinary flow","all of the above"], a:2, ai:false},
-                {q:"Hypoproteinemia is serum protein level _____.", o:["< 5.7 g/dL","> 6.7 g/dL","< 8.6 g/dL","< 6.7 g/dL"], a:0, ai:false},
-                {q:"High levels of plasma Ca++ levels stimulate the secretion of _____.", o:["renal phosphate","Parathyroid hormone","calcitonin","1-alpha-hydroxylase"], a:2, ai:false},
-                {q:"Creatine is synthesized in the liver from _____.", o:["lysine, methionine, arginine","glycine, methionine, arginine","lysine, cysteine, arginine","glycine, cysteine, arginine"], a:1, ai:false},
-                {q:"The normal values of Serum albumin are _____.", o:["3.5 - 5.0 g/dL","2.0 - 3.5 g/dL","1.5 - 2.5 g/dL","3.0 - 5.0 g/dL"], a:0, ai:false},
-                {q:"Why is measurement of plasma creatinine more precise than urinary creatinine clearance?", o:["Urine collection is dependent on the patient, which can introduce errors","Plasma creatinine is more abundant in the body than urinary creatinine","Urinary creatinine is more prone to degradation than plasma creatinine","Urine creatinine clearance is affected by hydration status, which can skew results"], a:0, ai:false},
-                {q:"Low values of blood urea nitrogen occur due to _____.", o:["gallstones","hemolytic anemia","Severe liver damage","biliary stricture"], a:2, ai:false},
-                {q:"A 60-year-old male with a history of heart failure presents with worsening dyspnea and edema. His serum creatinine levels are elevated, and his urine output is decreased. What is the likely cause of his renal dysfunction?", o:["Cardiorenal syndrome","Acute kidney injury (AKI)","Chronic kidney disease (CKD)","Dehydration"], a:0, ai:false},
-                {q:"The normal range of creatinine clearance in males?", o:["90-135 mL/minute","85-105 mL/minute","105 ± 20 mL/minute","95 ± 20 mL/minute"], a:0, ai:false},
-                {q:"Which of the following conditions is most likely to cause a decrease in total serum protein levels?", o:["Dehydration","Liver disease","Nephrotic syndrome","Multiple myeloma"], a:2, ai:false},
-                {q:"A patient presents with a total serum protein of 8.0 g/dL and an albumin of 4.5 g/dL. What is the albumin-globulin ratio?", o:["1.33","1.50","1.75","2.0"], a:0, ai:false}
-            ]
-        };
 
-        let state = { currentLecture: null, questions: [], answers: {}, score: 0, isMixed: false, aiUnlocked: false };
-        const correctEmojis = ['❤️‍🔥','🌟','🔥','💯','❤️','💪'];
-        const wrongEmojis = ['😑','🤦','❌','💔','💤'];
-        let audioCtx;
+<!-- Ocean background layers -->
+<div id="ocean-bg"></div>
+<canvas id="bg-canvas"></canvas>
 
-        function initAudio() {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const unlock = () => { if (audioCtx.state === 'suspended') audioCtx.resume(); };
-            document.addEventListener('click', unlock, { once: true });
-            document.addEventListener('touchstart', unlock, { once: true });
-        }
+<!-- Score bar -->
+<div id="score-bar">
+  <div>
+    <div class="score-label">Score</div>
+    <div class="score-value"><span id="score">0</span><span class="score-total"> / 25</span></div>
+  </div>
+  <div style="text-align:right">
+    <div class="score-label">Progress</div>
+    <div class="score-value" style="font-size:1rem"><span id="answered">0</span><span class="score-total"> answered</span></div>
+  </div>
+</div>
+<div id="progress-wrap"><div id="progress-fill"></div></div>
 
-        function playSound(type) {
-            if (!audioCtx) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
-            const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            const now = audioCtx.currentTime;
-            if (type === 'correct') {
-                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
-                osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
-                gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                osc.start(now); osc.stop(now + 0.3);
-            } else {                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now);
-                osc.frequency.exponentialRampToValueAtTime(200, now + 0.15);
-                gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-                osc.start(now); osc.stop(now + 0.25);
-            }
-        }
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-eyebrow">by: al_witify</div>
+  <h1 class="hero-title">Mid-Course<br>Exam MCQ</h1>
+  <div class="hero-sub">abdomin MCQs</div>
+  <div class="scroll-hint" onclick="document.querySelector('.quiz-wrapper').scrollIntoView({behavior:'smooth'})">
+    <span>Scroll to Begin</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</div>
 
-        function showEmoji(correct) {
-            const container = document.getElementById('emoji-container');
-            const el = document.createElement('div');
-            el.className = 'float-emoji';
-            el.textContent = correct ? correctEmojis[Math.floor(Math.random()*6)] : wrongEmojis[Math.floor(Math.random()*5)];
-            el.style.left = Math.random() * 80 + 10 + '%';
-            el.style.top = Math.random() * 40 + 40 + '%';
-            container.appendChild(el);
-            setTimeout(() => el.remove(), 2000);
-        }
+<!-- Quiz -->
+<div class="quiz-wrapper">
+  <div class="section-divider">
+    <div class="divider-line"><div class="divider-dot"></div></div>
+  </div>
+  <div id="quiz-content"></div>
+  <div id="final-card">
+    <h2>🌊 Exam Complete</h2>
+    <div id="final-score-big"></div>
+    <div id="final-msg"></div>
+  </div>
+</div>
 
-        function initHome() {
-            const grid = document.getElementById('lecture-grid');
-            grid.innerHTML = '';
-            Object.keys(rawData).forEach(l => {
-                const btn = document.createElement('div');
-                btn.className = 'card-btn glass';
-                btn.innerHTML = `<span>${l}</span><span class="q-count">(${rawData[l].length})</span>`;
-                btn.onclick = () => startQuiz(l);
-                grid.appendChild(btn);
-            });
-            const mixBtn = document.createElement('div');
-            mixBtn.className = 'card-btn glass mixed';
-            mixBtn.textContent = 'Mixed';
-            mixBtn.onclick = () => startQuiz('Mixed', true);
-            grid.appendChild(mixBtn);
-        }
+<!-- Sounds -->
+<audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" preload="auto"></audio>
+<audio id="snd-wrong" src="https://www.myinstants.com/media/sounds/wrong-answer-buzzer.mp3" preload="auto"></audio>
 
-        function shuffle(arr) {
-            for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
-            return arr;
-        }
+<script>
+// ===== BACKGROUND =====
+(function buildBG() {
+  // Bubbles
+  for (let i = 0; i < 40; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const sz = Math.random() * 14 + 4;
+    b.style.cssText = `
+      width:${sz}px;height:${sz}px;
+      left:${Math.random()*100}%;
+      bottom:${-sz}px;
+      --sway:${(Math.random()-0.5)*80}px;
+      animation-duration:${Math.random()*15+10}s;
+      animation-delay:${Math.random()*15}s;
+    `;
+    document.body.appendChild(b);
+  }
 
-        function startQuiz(lectureName, isMixed = false) {
-            state.currentLecture = lectureName;
-            state.isMixed = isMixed;
-            state.score = 0;
-            state.answers = {};
-            state.aiUnlocked = false;
-            state.questions = isMixed ? shuffle(Object.values(rawData).flat()).map((q, i) => ({...q, id: i+1})) : rawData[lectureName].map((q, i) => ({...q, id: i+1}));
-            renderQuiz();
-            saveProgress();
-        }
-        function renderQuiz() {
-            const container = document.getElementById('questions-container');
-            container.innerHTML = '';
-            document.getElementById('quiz-view').classList.remove('hidden');
-            document.getElementById('home-view').classList.add('hidden');
-            document.getElementById('quiz-title').textContent = state.isMixed ? 'Mixed Questions' : state.currentLecture;
-            updateScore();
-            const isLec8 = state.currentLecture === 'Liver Enzymes';
-            const showAI = state.isMixed || isLec8 || state.aiUnlocked;
-            state.questions.forEach((q, idx) => {
-                const isAI = q.ai;
-                const shouldHide = isAI && !showAI;
-                const card = document.createElement('div');
-                card.className = `q-card glass ${shouldHide ? 'ai-hidden' : ''} ${isAI ? 'ai-card' : ''}`;
-                card.innerHTML = `<div class="q-num">السؤال ${q.id}</div><div class="q-text">${q.q}</div><div class="options" id="opts-${idx}">${q.o.map((opt, oi) => `<div class="opt" onclick="handleOption(${idx},${oi})">${opt}</div>`).join('')}</div>`;
-                container.appendChild(card);
-                if (state.answers[idx] !== undefined) lockQuestion(idx, state.answers[idx], q.a);
-            });
-            if (!state.isMixed && !isLec8 && !state.aiUnlocked) {
-                const div = document.createElement('div');
-                div.className = 'ai-divider glass';
-                div.id = 'ai-transition-divider';
-                div.innerHTML = '<h3>🎉 انتهت أسئلة السنوات السابقة</h3><p>هل تريد المتابعة مع أسئلة الذكاء الاصطناعي؟</p><button onclick="unlockAI()">نعم، أكمل الأسئلة</button>';
-                container.appendChild(div);
-            }
-        }
+  // Light rays
+  for (let i = 0; i < 8; i++) {
+    const r = document.createElement('div');
+    r.className = 'light-ray';
+    const ang = (Math.random()-0.5)*30;
+    r.style.cssText = `
+      left:${10+i*12}%;
+      --r1:${ang-5}deg;
+      --r2:${ang+5}deg;
+      animation-duration:${Math.random()*6+6}s;
+      animation-delay:${Math.random()*5}s;
+      opacity:${Math.random()*0.4+0.1};
+    `;
+    document.body.appendChild(r);
+  }
 
-        function unlockAI() {
-            state.aiUnlocked = true;
-            saveProgress();
-            const div = document.getElementById('ai-transition-divider');
-            if (div) div.style.display = 'none';
-            document.querySelectorAll('.ai-card.ai-hidden').forEach((card, i) => {
-                card.classList.remove('ai-hidden');
-                card.classList.add('reveal-anim');
-                if (i === 0) setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
-            });
-        }
+  // Jellyfish SVG
+  const jellySVG = `<svg viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="40" cy="35" rx="32" ry="28" fill="rgba(0,200,255,0.08)" stroke="rgba(0,255,200,0.3)" stroke-width="1"/>
+    <ellipse cx="40" cy="35" rx="20" ry="16" fill="rgba(0,200,255,0.05)"/>
+    <line x1="28" y1="62" x2="22" y2="100" stroke="rgba(0,255,200,0.2)" stroke-width="1"/>
+    <line x1="34" y1="63" x2="30" y2="105" stroke="rgba(0,255,200,0.15)" stroke-width="1"/>
+    <line x1="40" y1="63" x2="40" y2="108" stroke="rgba(0,200,255,0.2)" stroke-width="1"/>
+    <line x1="46" y1="63" x2="50" y2="105" stroke="rgba(0,255,200,0.15)" stroke-width="1"/>
+    <line x1="52" y1="62" x2="58" y2="100" stroke="rgba(0,255,200,0.2)" stroke-width="1"/>
+  </svg>`;
 
-        function handleOption(qIdx, selIdx) {
-            if (state.answers[qIdx] !== undefined) return;
-            const correct = state.questions[qIdx].a;
-            state.answers[qIdx] = selIdx;
-            if (selIdx === correct) { state.score++; playSound('correct'); showEmoji(true); }
-            else { playSound('wrong'); showEmoji(false); }
-            updateScore();
-            lockQuestion(qIdx, selIdx, correct);
-            saveProgress();
-        }
-        function lockQuestion(qIdx, selected, correct) {
-            const opts = document.querySelectorAll(`#opts-${qIdx} .opt`);
-            opts.forEach(o => o.classList.add('locked'));
-            opts[selected].classList.add(selected === correct ? 'selected-correct' : 'selected-wrong');
-            if (selected !== correct) opts[correct].classList.add('show-correct');
-        }
+  for (let i = 0; i < 3; i++) {
+    const j = document.createElement('div');
+    j.className = 'jellyfish';
+    const sz = Math.random() * 80 + 60;
+    j.style.cssText = `
+      width:${sz}px;height:${sz*1.3}px;
+      left:${10+i*35}%;
+      --jdrift:${(Math.random()-0.5)*200}px;
+      animation-duration:${Math.random()*30+40}s;
+      animation-delay:${Math.random()*20}s;
+      opacity:${Math.random()*0.1+0.05};
+    `;
+    j.innerHTML = jellySVG;
+    document.body.appendChild(j);
+  }
 
-        function updateScore() {
-            document.getElementById('score-val').textContent = state.score;
-            document.getElementById('total-val').textContent = Object.keys(state.answers).length;
-        }
+  // Canvas particles (bioluminescent orbs)
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, orbs = [];
 
-        function goHome() {
-            document.getElementById('quiz-view').classList.add('hidden');
-            document.getElementById('home-view').classList.remove('hidden');
-            localStorage.removeItem('chemQuizState');
-            state = { currentLecture: null, questions: [], answers: {}, score: 0, isMixed: false, aiUnlocked: false };
-        }
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
 
-        function saveProgress() {
-            if (!state.currentLecture) return;
-            localStorage.setItem('chemQuizState', JSON.stringify(state));
-        }
+  for (let i = 0; i < 60; i++) {
+    orbs.push({
+      x: Math.random() * 2000 - 500,
+      y: Math.random() * 1000,
+      r: Math.random() * 3 + 0.5,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: -(Math.random() * 0.4 + 0.1),
+      alpha: Math.random(),
+      dAlpha: (Math.random() - 0.5) * 0.01,
+      color: Math.random() > 0.5 ? '0,255,200' : '0,180,255'
+    });
+  }
 
-        function loadSavedProgress() {
-            const saved = localStorage.getItem('chemQuizState');
-            if (!saved) return;
-            Object.assign(state, JSON.parse(saved));
-            document.getElementById('modal-overlay').classList.add('hidden');
-            renderQuiz();
-        }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    orbs.forEach(o => {
+      o.x += o.vx; o.y += o.vy;
+      o.alpha += o.dAlpha;
+      if (o.alpha <= 0 || o.alpha >= 1) o.dAlpha *= -1;
+      if (o.y < -10) { o.y = H + 10; o.x = Math.random() * W; }
 
-        function restartApp() {
-            localStorage.removeItem('chemQuizState');
-            document.getElementById('modal-overlay').classList.add('hidden');
-            state = { currentLecture: null, questions: [], answers: {}, score: 0, isMixed: false, aiUnlocked: false };
-            goHome();
-        }
+      const g = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r * 8);
+      g.addColorStop(0, `rgba(${o.color},${o.alpha * 0.8})`);
+      g.addColorStop(1, `rgba(${o.color},0)`);
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r * 8, 0, Math.PI * 2);
+      ctx.fillStyle = g;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 
-        const canvas = document.getElementById('chem-bg');
-        const ctx = canvas.getContext('2d');
-        let atoms = [], hexagons = [];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initBg(); }
-        function initBg() {
-            atoms = []; hexagons = [];
-            const w = canvas.width, h = canvas.height;
-            const ac = w < 768 ? 45 : 90;
-            for (let i = 0; i < ac; i++) atoms.push({ x: Math.random()*w, y: Math.random()*h, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5, size: Math.random()*3+1.5, color: Math.random()>0.7 ? 'rgba(56,189,248,' : 'rgba(167,139,250,' });
-            const hc = w < 768 ? 10 : 25;            for (let i = 0; i < hc; i++) hexagons.push({ x: Math.random()*w, y: Math.random()*h, size: Math.random()*40+20, rotation: Math.random()*Math.PI*2, speed: (Math.random()-0.5)*0.002, opacity: Math.random()*0.08+0.02 });
-        }
-        function drawHex(x, y, s, r, o) {
-            ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.beginPath();
-            for (let i = 0; i < 6; i++) { const a = (Math.PI/3)*i; const hx = s*Math.cos(a), hy = s*Math.sin(a); i===0 ? ctx.moveTo(hx,hy) : ctx.lineTo(hx,hy); }
-            ctx.closePath(); ctx.strokeStyle = `rgba(148,163,184,${o})`; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
-        }
-        function animateBg() {
-            const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            g.addColorStop(0, '#0f172a'); g.addColorStop(0.5, '#1e3a8a'); g.addColorStop(1, '#064e3b');
-            ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            hexagons.forEach(h => { h.rotation += h.speed; drawHex(h.x, h.y, h.size, h.rotation, h.opacity); });
-            atoms.forEach((p, i) => {
-                p.x += p.vx; p.y += p.vy;
-                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                for (let j = i+1; j < atoms.length; j++) {
-                    const p2 = atoms[j], dx = p.x-p2.x, dy = p.y-p2.y, d = Math.sqrt(dx*dx+dy*dy);
-                    if (d < 120) { ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.strokeStyle = `rgba(147,197,253,${0.15*(1-d/120)})`; ctx.lineWidth = 1; ctx.stroke(); }
-                }
-                ctx.fillStyle = p.color + '0.8)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
-                ctx.shadowBlur = 10; ctx.shadowColor = p.color + '1)'; ctx.fill(); ctx.shadowBlur = 0;
-            });
-            requestAnimationFrame(animateBg);
-        }
-        window.addEventListener('resize', resizeCanvas);
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                initAudio(); initHome(); resizeCanvas(); animateBg();
-                if (localStorage.getItem('chemQuizState')) document.getElementById('modal-overlay').classList.remove('hidden');
-            } catch (e) { console.error('Init Error:', e); }
-        });
-    </script>
+// ===== QUIZ DATA (unchanged) =====
+const quizData = [
+  { q: "A patient with pancreatitis develops an abscess localized in the lesser sac. Which of the following structures forms the anterior wall of the lesser sac?", options: ["Transverse mesocolon", "Greater omentum", "Posterior wall of the stomach", "Pancreas", "Left kidney"], a: 2 },
+  { q: "Which of the following organs is considered secondarily retroperitoneal?", options: ["Kidney", "Duodenum (second part)", "Adrenal gland", "Ureter", "Esophagus"], a: 1 },
+  { q: "A 35-year-old male is brought to the ER after a stab wound to the left upper quadrant. On examination, he has signs of peritonitis and is hemodynamically unstable. During an exploratory laparotomy, the surgeon finds a laceration on the anterosuperior surface of the stomach. Given the stomach's anatomical position, which of the following organs is LEAST likely to be injured by the same penetrating trauma?", options: ["Left lobe of the liver", "Spleen", "Transverse colon", "Right kidney", "Diaphragm"], a: 3 },
+  { q: "A 45-year-old woman presents with right upper quadrant pain, nausea, and fever. Ultrasound shows cholelithiasis with a stone impacted in the neck of the gallbladder. She is scheduled for a laparoscopic cholecystectomy. During the procedure, the surgeon must carefully identify the cystic duct and cystic artery. The cystic artery is most commonly a branch of the:", options: ["Left hepatic artery", "Right hepatic artery", "Common hepatic artery", "Gastroduodenal artery", "Superior mesenteric artery"], a: 1 },
+  { q: "The nerve supply to the gallbladder includes sympathetic, parasympathetic (vagus), and somatic afferent fibers via the right phrenic nerve. Irritation of the gallbladder can therefore refer pain to which dermatome?", options: ["Right shoulder", "Right upper quadrant", "Periumbilical region", "Left scapula", "Lower back"], a: 0 },
+  { q: "The bile duct descends posterior to the superior part of the duodenum and lies in a groove on which structure?", options: ["Anterior surface of the right kidney", "Medial border of the inferior vena cava", "Anterior surface of the portal vein", "Posterior surface of the head of the pancreas", "Lateral border of the aorta"], a: 3 },
+  { q: "The caudate lobe of the liver corresponds to which segment?", options: ["Segment II", "Segment IV", "Segment I", "Segment VII", "Segment VIII"], a: 2 },
+  { q: "The portal vein begins behind the neck of the pancreas by the union of which two veins?", options: ["Splenic vein and inferior mesenteric vein", "Superior mesenteric vein and inferior mesenteric vein", "Splenic vein and superior mesenteric vein", "Left gastric vein and superior mesenteric vein", "Splenic vein and left gastric vein"], a: 2 },
+  { q: "In portal hypertension, porto-systemic anastomoses become engorged. Which of the following is NOT a typical site of porto-systemic anastomosis?", options: ["Esophageal veins (with azygos system)", "Paraumbilical veins (with epigastric veins)", "Rectal veins (with middle and inferior rectal veins)", "Renal veins (with gonadal veins)", "Retroperitoneal veins (with lumbar veins)"], a: 3 },
+  { q: "Which of the following correctly describes the parasympathetic innervation to the rectum?", options: ["Derived from the vagus nerve", "Derived from the lumbar splanchnic nerves (L1-L2)", "Derived from the pelvic splanchnic nerves (S2-S4)", "Derived from the superior mesenteric plexus", "Derived from the pudendal nerve"], a: 2 },
+  { q: "A patient has a bleeding ulcer on the posterior wall of the stomach near the lesser curvature. Based on the anatomy, which artery is most likely to be eroded?", options: ["Short gastric arteries", "Left gastroepiploic artery", "Right gastroepiploic artery", "Left gastric artery", "Splenic artery"], a: 3 },
+  { q: "The Z-line, visible during an endoscopy, marks the:", options: ["Junction between the fundus and the body of the stomach.", "Pyloric sphincter.", "Squamocolumnar junction between the oesophagus and stomach.", "Attachment point of the lesser omentum.", "Site where the left gastric artery enters the stomach wall."], a: 2 },
+  { q: "During a laparoscopic cholecystectomy, the surgeon dissects the hepatoduodenal ligament and identifies a structure that lies posterior to the common bile duct and the common hepatic artery. This structure is the:", options: ["Portal vein", "Cystic duct", "Right hepatic artery", "Gastroduodenal artery", "Inferior vena cava"], a: 0 },
+  { q: "The ligamentum teres (round ligament of the liver) is a remnant of which fetal vessel?", options: ["Umbilical artery", "Umbilical vein", "Ductus venosus", "Urachus", "Vitelline duct"], a: 1 },
+  { q: "A 28-year-old woman with known Crohn's disease presents with small bowel obstruction. CT enterography shows a long segment of terminal ileal narrowing with \"creeping fat\" (mesenteric fat wrapping around the bowel wall). Based on these intraoperative findings, which of the following correctly distinguishes the normal ileum from the jejunum?", options: ["Ileum has longer vasa recta and fewer arcades", "Ileum has thicker walls and more prominent plicae circulares", "Ileum has more mesenteric fat, shorter vasa recta, and more arcades", "Ileum has no arterial arcades and vasa recta that pierce the mesentery directly", "Ileum has a wider lumen and a darker serosal color"], a: 2 },
+  { q: "Which of the following are the three distinctive external features of the large intestine that help differentiate it from the small intestine?", options: ["Plicae circulares, villi, and microvilli", "Taenia coli, haustra, and omental appendices", "Mesenteric arcades, vasa recta, and Peyer's patches", "Valves of Kerckring, Brunner's glands, and crypts of Lieberkühn", "Longitudinal muscle, circular muscle, and serosa"], a: 1 },
+  { q: "A surgeon performing an appendectomy needs to identify and ligate the appendicular artery. This artery is most commonly a branch of which vessel?", options: ["Ileocolic artery", "Right colic artery", "Middle colic artery", "Superior mesenteric artery directly", "Cecal artery"], a: 0 },
+  { q: "The transverse colon is the largest and most mobile part of the large intestine. Its primary arterial supply is from the:", options: ["Left colic artery", "Right colic artery", "Middle colic artery", "Sigmoid arteries", "Ileocolic artery"], a: 2 },
+  { q: "Lymphatic drainage from the inferior half of the rectum (distal ampulla) follows the middle rectal vessels and primarily drains to which lymph nodes?", options: ["Inferior mesenteric nodes", "Pararectal nodes", "Internal iliac nodes", "Superficial inguinal nodes", "Lumbar nodes"], a: 2 },
+];
+
+const emojisCorrect = ["🪿","❤️","🔥","❤️‍🔥","🫶","💯","💪","😍"];
+const emojisWrong   = ["😑","🤦","💤","❌","💔","🦖","😂"];
+
+let score = 0;
+let answeredCount = 0;
+const TOTAL = quizData.length;
+
+const quizBox = document.getElementById('quiz-content');
+
+quizData.forEach((data, idx) => {
+  const card = document.createElement('div');
+  card.className = 'q-card';
+
+  const numBadge = document.createElement('div');
+  numBadge.className = 'q-num';
+  numBadge.textContent = idx + 1;
+
+  const qText = document.createElement('div');
+  qText.className = 'q-text';
+  qText.textContent = data.q;
+
+  const optsGrid = document.createElement('div');
+  optsGrid.className = 'options-grid';
+
+  const emoji = document.createElement('div');
+  emoji.className = 'emoji-pop';
+
+  let answered = false;
+  const letters = ['A','B','C','D','E'];
+
+  data.options.forEach((txt, i) => {
+    const opt = document.createElement('div');
+    opt.className = 'opt';
+
+    const letter = document.createElement('div');
+    letter.className = 'opt-letter';
+    letter.textContent = letters[i];
+
+    const label = document.createElement('div');
+    label.className = 'opt-text';
+    label.textContent = txt;
+
+    opt.appendChild(letter);
+    opt.appendChild(label);
+
+    opt.onclick = (e) => {
+      if (answered) return;
+      answered = true;
+
+      // Ripple effect
+      const rip = document.createElement('div');
+      rip.className = 'ripple-el';
+      const rect = opt.getBoundingClientRect();
+      rip.style.left = (e.clientX - rect.left) + 'px';
+      rip.style.top  = (e.clientY - rect.top)  + 'px';
+      rip.style.background = i === data.a
+        ? 'rgba(0,229,160,0.4)' : 'rgba(255,68,102,0.4)';
+      opt.appendChild(rip);
+      setTimeout(() => rip.remove(), 700);
+
+      // Disable all
+      optsGrid.querySelectorAll('.opt').forEach(o => o.classList.add('disabled'));
+
+      const isCorrect = (i === data.a);
+      if (isCorrect) {
+        opt.classList.add('correct');
+        score++;
+        document.getElementById('score').textContent = score;
+        emoji.textContent = emojisCorrect[Math.floor(Math.random() * emojisCorrect.length)];
+        tryPlay('snd-correct');
+      } else {
+        opt.classList.add('wrong');
+        optsGrid.children[data.a].classList.add('correct');
+        emoji.textContent = emojisWrong[Math.floor(Math.random() * emojisWrong.length)];
+        tryPlay('snd-wrong');
+      }
+
+      emoji.style.display = 'block';
+      emoji.style.animation = 'none';
+      void emoji.offsetWidth;
+      emoji.style.animation = '';
+
+      // Update progress
+      answeredCount++;
+      document.getElementById('answered').textContent = answeredCount;
+      document.getElementById('progress-fill').style.width = (answeredCount / TOTAL * 100) + '%';
+
+      if (answeredCount === TOTAL) {
+        setTimeout(showFinalScore, 800);
+      }
+    };
+
+    optsGrid.appendChild(opt);
+  });
+
+  card.appendChild(numBadge);
+  card.appendChild(qText);
+  card.appendChild(optsGrid);
+  card.appendChild(emoji);
+  quizBox.appendChild(card);
+});
+
+function tryPlay(id) {
+  try {
+    const el = document.getElementById(id);
+    el.currentTime = 0;
+    el.play().catch(() => {});
+  } catch(e) {}
+}
+
+function showFinalScore() {
+  const fc = document.getElementById('final-card');
+  fc.style.display = 'block';
+  document.getElementById('final-score-big').textContent = score + ' / ' + TOTAL;
+  const pct = Math.round(score / TOTAL * 100);
+  let msg;
+  if (pct >= 90) msg = '🌊 Exceptional! You mastered this exam.';
+  else if (pct >= 75) msg = '💎 Great work! A strong performance.';
+  else if (pct >= 60) msg = '🔬 Good effort — review the misses.';
+  else msg = '📖 Keep studying — you\'ve got this!';
+  document.getElementById('final-msg').textContent = msg;
+  fc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
 </body>
 </html>
